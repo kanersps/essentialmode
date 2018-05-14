@@ -4,22 +4,22 @@
 	<script>
 		function addCommas(nStr) {
 			nStr += '';
-			var x = nStr.split('.');
-			var x1 = x[0];
-			var x2 = x.length > 1 ? '.' + x[1] : '';
-			var rgx = /(\d+)(\d{3})/;
+			let x = nStr.split('.');
+			let x1 = x[0];
+			let x2 = x.length > 1 ? '.' + x[1] : '';
+			let rgx = /(\d+)(\d{3})/;
 			while (rgx.test(x1)) {
 				x1 = x1.replace(rgx, '$1' + '<span style="margin-left: 3px; margin-right: 3px;"/>' + '$2');
 			}
 			return x1 + x2;
 		}
 
-		var moneyIcon = "$"
+		let moneyIcon = "$"
 
 		window.onload = function(e){
 			// NUI Callback
 			window.addEventListener('message', function(event){
-				var item = event.data;
+				let item = event.data;
 
 				if(item.seticon == true)
 					moneyIcon = item.icon;
@@ -69,12 +69,12 @@
 			font-size: 35px;
 			color: white;
 			padding: 4px;
-		text-shadow:
-		   -1px -1px 0 #000,
-			1px -1px 0 #000,
-			-1px 1px 0 #000,
-			 1px 1px 0 #000;
-				}
+			text-shadow:
+					-1px -1px 0 #000,
+					1px -1px 0 #000,
+					-1px 1px 0 #000,
+					1px 1px 0 #000;
+			}
 
 		#container {
 			position: absolute;
@@ -84,12 +84,9 @@
 </head>
 
 <body>
-	<div id="starter" style="font-family: 'roboto'; color: white; position: absolute; left: 20%; top: 5%; width: 60%; background: rgba(40, 40, 40, 0.8)">
-
-	</div>
+	<div id="starter" style="font-family: 'roboto'; color: white; position: absolute; left: 20%; top: 5%; width: 60%; background: rgba(40, 40, 40, 0.8)"></div>
 	<div id="container">
 		<div id="money">
-
 			<div id="cash"/>
 		</div>
 	</div>
