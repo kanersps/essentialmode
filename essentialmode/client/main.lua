@@ -41,6 +41,21 @@ Citizen.CreateThread(function()
 	end
 end)
 
+Citizen.CreateThread(function()
+	while true do
+		Citizen.Wait(0)
+		
+		if pvpEnabled then
+			for i = 0,32 do
+				if NetworkIsPlayerActive(i) then
+					SetCanAttackFriendly(GetPlayerPed(i), true, true)
+					NetworkSetFriendlyFireOption(true)
+				end
+			end
+		end
+	end
+end)
+
 local myDecorators = {}
 
 RegisterNetEvent("es:setPlayerDecorator")
@@ -73,10 +88,6 @@ AddEventHandler("playerSpawned", function()
 		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
 		SetPlayerCashChange(0, 1)
 		SetPlayerCashChange(0, -1)
-	end
-
-	if pvpEnabled then
-
 	end
 
 	TriggerServerEvent('playerSpawn')
@@ -170,15 +181,5 @@ end)
 
 RegisterNetEvent("es:enablePvp")
 AddEventHandler("es:enablePvp", function()
-	Citizen.CreateThread(function()
-		while true do
-			Citizen.Wait(0)
-			for i = 0,32 do
-				if NetworkIsPlayerActive(i) then
-					SetCanAttackFriendly(GetPlayerPed(i), true, true)
-					NetworkSetFriendlyFireOption(true)
-				end
-			end
-		end
-	end)
+	pvpEnabled = true
 end)

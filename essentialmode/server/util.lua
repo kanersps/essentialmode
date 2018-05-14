@@ -75,6 +75,7 @@ function doesLogExist(cb)
 		end)
 	end)
 end
+
 Citizen.CreateThread(function()
 	if settings.defaultSettings.enableLogging then doesLogExist(function()end) end
 	return

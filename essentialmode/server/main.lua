@@ -3,20 +3,26 @@
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 
-_VERSION = '5.0.0'
+_VERSION = '5.0.2'
 
 -- Server
 
 -- Version check
-PerformHttpRequest("http://fivem.online/version.txt", function(err, rText, headers)
+PerformHttpRequest("https://kanersps.pw/fivem/version.txt", function(err, rText, headers)
 	print("\nCurrent version: " .. _VERSION)
-	print("Updater version: " .. rText .. "\n")
-	
-	if rText ~= _VERSION then
-		print("\nVersion mismatch, you are currently not using the newest stable version of essentialmode. Please update\n")
-		log('Version mismatch was detected, updater version: ' .. rText .. '(' .. _VERSION .. ')')
+
+	if err == 200 then
+		print("Updater version: " .. rText .. "\n")
+		
+		if rText ~= _VERSION then
+			print("\nVersion mismatch, you are currently not using the newest stable version of essentialmode. Please update\n")
+			log('Version mismatch was detected, updater version: ' .. rText .. '(' .. _VERSION .. ')')
+		else
+			print("Everything is fine!\n")
+		end
 	else
-		print("Everything is fine!\n")
+		print("Updater version: UPDATER UNAVAILABLE")
+		print("This could be your internet connection or that the update server is not running. This won't impact the server\n\n")
 	end
 end, "GET", "", {what = 'this'})
 

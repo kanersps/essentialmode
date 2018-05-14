@@ -276,7 +276,6 @@ function db.performCheckRunning()
 	end)
 end
 
---db.firstRunCheck()
 db.firstRunCheck()
 
 function exposedDB.createDatabase(db, cb)
