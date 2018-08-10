@@ -3,7 +3,7 @@
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 
-_VERSION = '5.0.2'
+_VERSION = '5.0.3'
 
 -- Server
 
@@ -39,6 +39,24 @@ end)
 
 local justJoined = {}
 
+RegisterServerEvent('playerConnecting')
+AddEventHandler('playerConnecting', function(name, setKickReason, tempSource)
+	Citizen.CreateThread(function()
+		local id
+		for k,v in ipairs(GetPlayerIdentifiers(Source))do
+			if string.sub(v, 1, string.len("steam:")) == "steam:" then
+				id = v
+				break
+			end
+		end
+
+		if not id then
+			setKickReason(Source, "Couldn't find proper identifier please re-launch the game while a identity provider is open")
+			CancelEvent()
+		end
+	end)
+end)
+
 RegisterServerEvent('es:firstJoinProper')
 AddEventHandler('es:firstJoinProper', function()
 	local Source = source
@@ -52,7 +70,7 @@ AddEventHandler('es:firstJoinProper', function()
 		end
 
 		if not id then
-			DropPlayer(Source, "Couldn't find SteamID please re-launch the game while Steam is open")
+			DropPlayer(Source, "Couldn't find proper identifier please re-launch the game while a identity provider is open")
 		else
 			registerUser(id, Source)
 			justJoined[Source] = true

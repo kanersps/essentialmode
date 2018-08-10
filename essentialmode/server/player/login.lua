@@ -78,7 +78,10 @@ function registerUser(identifier, source)
 		if exists then
 			LoadUser(identifier, Source, false)
 		else
-
+			db.createUser(identifier, license, function(r, user)
+				LoadUser(identifier, Source, true)
+			end)
+			--[[
 			local license
 
 			for k,v in ipairs(GetPlayerIdentifiers(Source))do
@@ -103,6 +106,7 @@ function registerUser(identifier, source)
 					LoadUser(identifier, Source, true)
 				end)
 			end
+			]]
 		end
 	end)
 end
