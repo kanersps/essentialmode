@@ -41,20 +41,18 @@ local justJoined = {}
 
 RegisterServerEvent('playerConnecting')
 AddEventHandler('playerConnecting', function(name, setKickReason, tempSource)
-	Citizen.CreateThread(function()
-		local id
-		for k,v in ipairs(GetPlayerIdentifiers(Source))do
-			if string.sub(v, 1, string.len("steam:")) == "steam:" then
-				id = v
-				break
-			end
+	local id
+	for k,v in ipairs(GetPlayerIdentifiers(tempSource))do
+		if string.sub(v, 1, string.len("steam:")) == "steam:" then
+			id = v
+			break
 		end
+	end
 
-		if not id then
-			setKickReason(Source, "Couldn't find proper identifier please re-launch the game while a identity provider is open")
-			CancelEvent()
-		end
-	end)
+	if not id then
+		setKickReason(tempSource, "Unable to find SteamID, please relaunch FiveM with steam open or restart FiveM & Steam if steam is already open")
+		CancelEvent()
+	end
 end)
 
 RegisterServerEvent('es:firstJoinProper')
@@ -70,7 +68,7 @@ AddEventHandler('es:firstJoinProper', function()
 		end
 
 		if not id then
-			DropPlayer(Source, "Couldn't find proper identifier please re-launch the game while a identity provider is open")
+			DropPlayer(Source, "SteamID not found, please try reconnecting with Steam open.")
 		else
 			registerUser(id, Source)
 			justJoined[Source] = true
