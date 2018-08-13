@@ -50,7 +50,7 @@ AddEventHandler('playerConnecting', function(name, setKickReason, tempSource)
 	end
 
 	if not id then
-		setKickReason(tempSource, "Unable to find SteamID, please relaunch FiveM with steam open or restart FiveM & Steam if steam is already open")
+		setKickReason("Unable to find SteamID, please relaunch FiveM with steam open or restart FiveM & Steam if steam is already open")
 		CancelEvent()
 	end
 end)
