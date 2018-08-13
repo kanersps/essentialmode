@@ -40,9 +40,9 @@ end)
 local justJoined = {}
 
 RegisterServerEvent('playerConnecting')
-AddEventHandler('playerConnecting', function(name, setKickReason, tempSource)
+AddEventHandler('playerConnecting', function(name, setKickReason)
 	local id
-	for k,v in ipairs(GetPlayerIdentifiers(tempSource))do
+	for k,v in ipairs(GetPlayerIdentifiers(source))do
 		if string.sub(v, 1, string.len("steam:")) == "steam:" then
 			id = v
 			break
