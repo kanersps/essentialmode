@@ -163,11 +163,9 @@ AddEventHandler('es_admin:set', function(t, USER, GROUP)
 					GROUP = tonumber(GROUP)
 					if(GROUP ~= nil and GROUP > -1)then
 						TriggerEvent("es:setPlayerData", USER, "permission_level", GROUP, function(response, success)
-							if(true)then
-								TriggerClientEvent('chat:addMessage', Source, {
-									args = {"^1SYSTEM", "Permission level of ^2" .. GetPlayerName(tonumber(USER)) .. "^0 has been set to ^2 " .. tostring(GROUP)}
-								})
-							end
+							TriggerClientEvent('chat:addMessage', Source, {
+								args = {"^1SYSTEM", "Permission level of ^2" .. GetPlayerName(tonumber(USER)) .. "^0 has been set to ^2 " .. tostring(GROUP)}
+							})
 						end)	
 					else
 						TriggerClientEvent('chat:addMessage', Source, {
@@ -237,13 +235,10 @@ AddEventHandler('rconCommand', function(commandName, args)
 		TriggerEvent("es:setPlayerData", tonumber(args[1]), "permission_level", tonumber(args[2]), function(response, success)
 			RconPrint(response)
 
-			if(true)then
-				print(args[1] .. " " .. args[2])
-				TriggerClientEvent('es:setPlayerDecorator', tonumber(args[1]), 'rank', tonumber(args[2]), true)
-				TriggerClientEvent('chat:addMessage', -1, {
-					args = {"^1CONSOLE", "Permission level of ^2" .. GetPlayerName(tonumber(args[1])) .. "^0 has been set to ^2 " .. args[2]}
-				})
-			end
+			TriggerClientEvent('es:setPlayerDecorator', tonumber(args[1]), 'rank', tonumber(args[2]), true)
+			TriggerClientEvent('chat:addMessage', -1, {
+				args = {"^1CONSOLE", "Permission level of ^2" .. GetPlayerName(tonumber(args[1])) .. "^0 has been set to ^2 " .. args[2]}
+			})
 		end)
 
 		CancelEvent()
@@ -265,12 +260,10 @@ AddEventHandler('rconCommand', function(commandName, args)
 			if(groups[args[2]])then
 				TriggerEvent("es:setPlayerData", tonumber(args[1]), "group", args[2], function(response, success)
 
-					if(true)then
-						TriggerClientEvent('es:setPlayerDecorator', tonumber(args[1]), 'group', tonumber(args[2]), true)
-						TriggerClientEvent('chat:addMessage', -1, {
-							args = {"^1CONSOLE", "Group of ^2^*" .. GetPlayerName(tonumber(args[1])) .. "^r^0 has been set to ^2^*" .. args[2]}
-						})
-					end
+					TriggerClientEvent('es:setPlayerDecorator', tonumber(args[1]), 'group', tonumber(args[2]), true)
+					TriggerClientEvent('chat:addMessage', -1, {
+						args = {"^1CONSOLE", "Group of ^2^*" .. GetPlayerName(tonumber(args[1])) .. "^r^0 has been set to ^2^*" .. args[2]}
+					})
 				end)
 			else
 				RconPrint("This group does not exist.\n")
