@@ -3,7 +3,7 @@
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 
-_VERSION = '5.0.3'
+_VERSION = '5.1.0'
 
 -- Server
 
@@ -127,9 +127,13 @@ AddEventHandler('chatMessage', function(source, n, message)
 			CancelEvent()
 			if(command.perm > 0)then
 				if(Users[source].getPermissions() >= command.perm or groups[Users[source].getGroup()]:canTarget(command.group))then
-					command.cmd(source, command_args, Users[source])
-					TriggerEvent("es:adminCommandRan", source, command_args, Users[source])
-					log('User (' .. GetPlayerName(Source) .. ') ran admin command ' .. command_args[1] .. ', with parameters: ' .. table.concat(command_args, ' '))
+					if (not (command.arguments == #command_args - 1) and command.arguments > -1) then
+						TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+					else
+						command.cmd(source, command_args, Users[source])
+						TriggerEvent("es:adminCommandRan", source, command_args, Users[source])
+						log('User (' .. GetPlayerName(Source) .. ') ran admin command ' .. command_args[1] .. ', with parameters: ' .. table.concat(command_args, ' '))
+					end
 				else
 					command.callbackfailed(source, command_args, Users[source])
 					TriggerEvent("es:adminCommandFailed", source, command_args, Users[source])
@@ -142,8 +146,12 @@ AddEventHandler('chatMessage', function(source, n, message)
 					debugMsg("Non admin (" .. GetPlayerName(Source) .. ") attempted to run admin command: " .. command_args[1])
 				end
 			else
-				command.cmd(source, command_args, Users[source])
-				TriggerEvent("es:userCommandRan", source, command_args)
+				if (not (command.arguments <= (#command_args - 1)) and command.arguments > -1) then
+					TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+				else
+					command.cmd(source, command_args, Users[source])
+					TriggerEvent("es:userCommandRan", source, command_args)
+				end
 			end
 			
 			TriggerEvent("es:commandRan", source, command_args, Users[source])
@@ -159,11 +167,12 @@ AddEventHandler('chatMessage', function(source, n, message)
 	end
 end)
 
-function addCommand(command, callback, suggestion)
+function addCommand(command, callback, suggestion, arguments)
 	commands[command] = {}
 	commands[command].perm = 0
 	commands[command].group = "user"
 	commands[command].cmd = callback
+	commands[command].arguments = arguments or -1
 
 	if suggestion then
 		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
@@ -173,22 +182,27 @@ function addCommand(command, callback, suggestion)
 	end
 
 	RegisterCommand(command, function(source, args)
-		callback(source, args, Users[source])
+		if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
+			callback(source, args, Users[source])
+		else
+			TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+		end
 	end, false)
 
 	debugMsg("Command added: " .. command)
 end
 
-AddEventHandler('es:addCommand', function(command, callback, suggestion)
-	addCommand(command, callback, suggestion)
+AddEventHandler('es:addCommand', function(command, callback, suggestion, arguments)
+	addCommand(command, callback, suggestion, arguments)
 end)
 
-function addAdminCommand(command, perm, callback, callbackfailed, suggestion)
+function addAdminCommand(command, perm, callback, callbackfailed, suggestion, arguments)
 	commands[command] = {}
 	commands[command].perm = perm
 	commands[command].group = "superadmin"
 	commands[command].cmd = callback
 	commands[command].callbackfailed = callbackfailed
+	commands[command].arguments = arguments or -1
 
 	if suggestion then
 		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
@@ -200,26 +214,40 @@ function addAdminCommand(command, perm, callback, callbackfailed, suggestion)
 	ExecuteCommand('add_ace group.superadmin command.' .. command .. ' allow')
 
 	RegisterCommand(command, function(source, args)
-		if Users[source].getPermissions() >= perm then
-			callback(source, args, Users[source])
+		-- Console check
+		if(source ~= 0)then
+			if Users[source].getPermissions() >= perm then
+				if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
+					callback(source, args, Users[source])
+				else
+					TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+				end
+			else
+				callbackfailed(source, args, Users[source])
+			end
 		else
-			callbackfailed(source, args, Users[source])
+			if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
+				callback(source, args, Users[source])
+			else
+				TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+			end
 		end
 	end)
 
 	debugMsg("Admin command added: " .. command .. ", requires permission level: " .. perm)
 end
 
-AddEventHandler('es:addAdminCommand', function(command, perm, callback, callbackfailed, suggestion)
-	addAdminCommand(command, perm, callback, callbackfailed, suggestion)
+AddEventHandler('es:addAdminCommand', function(command, perm, callback, callbackfailed, suggestion, arguments)
+	addAdminCommand(command, perm, callback, callbackfailed, suggestion, arguments)
 end)
 
-function addGroupCommand(command, group, callback, callbackfailed, suggestion)
+function addGroupCommand(command, group, callback, callbackfailed, suggestion, arguments)
 	commands[command] = {}
 	commands[command].perm = math.maxinteger
 	commands[command].group = group
 	commands[command].cmd = callback
 	commands[command].callbackfailed = callbackfailed
+	commands[command].arguments = arguments or -1
 
 	if suggestion then
 		if not suggestion.params or not type(suggestion.params) == "table" then suggestion.params = {} end
@@ -231,18 +259,31 @@ function addGroupCommand(command, group, callback, callbackfailed, suggestion)
 	ExecuteCommand('add_ace group.' .. group .. ' command.' .. command .. ' allow')
 
 	RegisterCommand(command, function(source, args)
-		if groups[Users[source].getGroup()]:canTarget(group) then
-			callback(source, args, Users[source])
+		-- Console check
+		if(source ~= 0)then
+			if groups[Users[source].getGroup()]:canTarget(group) then
+				if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
+					callback(source, args, Users[source])
+				else
+					TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+				end
+			else
+				callbackfailed(source, args, Users[source])
+			end
 		else
-			callbackfailed(source, args, Users[source])
+			if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
+				callback(source, args, Users[source])
+			else
+				TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+			end
 		end
 	end)
 
 	debugMsg("Group command added: " .. command .. ", requires group: " .. group)
 end
 
-AddEventHandler('es:addGroupCommand', function(command, group, callback, callbackfailed, suggestion)
-	addGroupCommand(command, group, callback, callbackfailed, suggestion)
+AddEventHandler('es:addGroupCommand', function(command, group, callback, callbackfailed, suggestion, arguments)
+	addGroupCommand(command, group, callback, callbackfailed, suggestion, arguments)
 end)
 
 AddEventHandler('es:addACECommand', function(command, group, callback)
