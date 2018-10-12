@@ -16,14 +16,13 @@ Citizen.CreateThread(function()
 end)
 
 local loaded = false
-local cashy = 0
 local oldPos
 local pvpEnabled = false
 
 Citizen.CreateThread(function()
 	while true do
 		Citizen.Wait(1000)
-		local pos = GetEntityCoords(GetPlayerPed(-1))
+		local pos = GetEntityCoords(PlayerPedId())
 
 		if(oldPos ~= pos)then
 			TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
@@ -31,7 +30,7 @@ Citizen.CreateThread(function()
 			if(loaded)then
 				SendNUIMessage({
 					setmoney = true,
-					money = cashy
+					money = 0
 				})
 
 				loaded = false
@@ -64,7 +63,7 @@ AddEventHandler("es:setPlayerDecorator", function(key, value, doNow)
 	DecorRegister(key, 3)
 
 	if(doNow)then
-		DecorSetInt(GetPlayerPed(-1), key, value)
+		DecorSetInt(PlayerPedId(), key, value)
 	end
 end)
 
@@ -73,7 +72,7 @@ local enableNative = {}
 local firstSpawn = true
 AddEventHandler("playerSpawned", function()
 	for k,v in pairs(myDecorators)do
-		DecorSetInt(GetPlayerPed(-1), k, v)
+		DecorSetInt(PlayerPedId(), k, v)
 	end
 
 	if enableNative[1] then
@@ -141,7 +140,7 @@ AddEventHandler("es:addedMoney", function(m, native)
 		})
 	else
 		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		Citizen.InvokeNative(0x0772DF77852C2E30, math.floor(m), 0)
+		SetPlayerCashChange(math.floor(m), 0)
 	end
 
 end)
@@ -155,20 +154,20 @@ AddEventHandler("es:removedMoney", function(m, native, current)
 		})
 	else
 		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		Citizen.InvokeNative(0x0772DF77852C2E30, -math.floor(m), 0)
+		SetPlayerCashChange(-math.floor(m), 0)
 	end
 end)
 
 RegisterNetEvent('es:addedBank')
 AddEventHandler('es:addedBank', function(m)
 	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	Citizen.InvokeNative(0x0772DF77852C2E30, 0, math.floor(m))
+	SetPlayerCashChange(0, math.floor(m))
 end)
 
 RegisterNetEvent('es:removedBank')
 AddEventHandler('es:removedBank', function(m)
 	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	Citizen.InvokeNative(0x0772DF77852C2E30, 0, -math.floor(m))
+	SetPlayerCashChange(0, -math.floor(m))
 end)
 
 RegisterNetEvent("es:setMoneyDisplay")
