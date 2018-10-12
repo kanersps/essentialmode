@@ -221,9 +221,9 @@ end)
 AddEventHandler('rconCommand', function(commandName, args)
 	if commandName == 'setadmin' then
 		if #args ~= 2 then
-				RconPrint("Usage: setadmin [user-id] [permission-level]\n")
-				CancelEvent()
-				return
+			RconPrint("Usage: setadmin [user-id] [permission-level]\n")
+			CancelEvent()
+			return
 		end
 
 		if(GetPlayerName(tonumber(args[1])) == nil)then
@@ -244,9 +244,9 @@ AddEventHandler('rconCommand', function(commandName, args)
 		CancelEvent()
 	elseif commandName == 'setgroup' then
 		if #args ~= 2 then
-				RconPrint("Usage: setgroup [user-id] [group]\n")
-				CancelEvent()
-				return
+			RconPrint("Usage: setgroup [user-id] [group]\n")
+			CancelEvent()
+			return
 		end
 
 		if(GetPlayerName(tonumber(args[1])) == nil)then
@@ -273,9 +273,9 @@ AddEventHandler('rconCommand', function(commandName, args)
 		CancelEvent()
 	elseif commandName == 'giverole' then
 		if #args < 2 then
-				RconPrint("Usage: giverole [user-id] [role]\n")
-				CancelEvent()
-				return
+			RconPrint("Usage: giverole [user-id] [role]\n")
+			CancelEvent()
+			return
 		end
 
 		if(GetPlayerName(tonumber(args[1])) == nil)then
@@ -284,20 +284,20 @@ AddEventHandler('rconCommand', function(commandName, args)
 			return
 		end
 
-			TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
-				table.remove(args, 1)
-				user.giveRole(table.concat(args, " "))
-				TriggerClientEvent('chat:addMessage', user.get('source'), {
-					args = {"^1SYSTEM", "You've been given a role: ^2" .. table.concat(args, " ")}
-				})
-			end)
+		TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
+			table.remove(args, 1)
+			user.giveRole(table.concat(args, " "))
+			TriggerClientEvent('chat:addMessage', user.get('source'), {
+				args = {"^1SYSTEM", "You've been given a role: ^2" .. table.concat(args, " ")}
+			})
+		end)
 
 		CancelEvent()
 	elseif commandName == 'removerole' then
 		if #args < 2 then
-				RconPrint("Usage: removerole [user-id] [role]\n")
-				CancelEvent()
-				return
+			RconPrint("Usage: removerole [user-id] [role]\n")
+			CancelEvent()
+			return
 		end
 
 		if(GetPlayerName(tonumber(args[1])) == nil)then
@@ -306,41 +306,41 @@ AddEventHandler('rconCommand', function(commandName, args)
 			return
 		end
 
-			TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
-				table.remove(args, 1)
-				user.removeRole(table.concat(args, " "))
-				TriggerClientEvent('chat:addMessage', user.get('source'), {
-					args = {"^1SYSTEM", "You've been removed a role: ^2" .. table.concat(args, " ")}
-				})
-			end)
+		TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
+			table.remove(args, 1)
+			user.removeRole(table.concat(args, " "))
+			TriggerClientEvent('chat:addMessage', user.get('source'), {
+				args = {"^1SYSTEM", "You've been removed a role: ^2" .. table.concat(args, " ")}
+			})
+		end)
 
 		CancelEvent()
 	elseif commandName == 'setmoney' then
-			if #args ~= 2 then
-					RconPrint("Usage: setmoney [user-id] [money]\n")
-					CancelEvent()
-					return
-			end
-
-			if(GetPlayerName(tonumber(args[1])) == nil)then
-				RconPrint("Player not ingame\n")
-				CancelEvent()
-				return
-			end
-
-			TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
-				if(user)then
-					user.setMoney(tonumber(args[2]))
-
-					RconPrint("Money set")
-					TriggerClientEvent('chat:addMessage', tonumber(args[1]), {
-						args = {"^1SYSTEM", "Your money has been set to: ^2^*$" .. tonumber(args[2])}
-					})
-				end
-			end)
-
+		if #args ~= 2 then
+			RconPrint("Usage: setmoney [user-id] [money]\n")
 			CancelEvent()
+			return
 		end
+
+		if(GetPlayerName(tonumber(args[1])) == nil)then
+			RconPrint("Player not ingame\n")
+			CancelEvent()
+			return
+		end
+
+		TriggerEvent("es:getPlayerFromId", tonumber(args[1]), function(user)
+			if(user)then
+				user.setMoney(tonumber(args[2]))
+
+				RconPrint("Money set")
+				TriggerClientEvent('chat:addMessage', tonumber(args[1]), {
+					args = {"^1SYSTEM", "Your money has been set to: ^2^*$" .. tonumber(args[2])}
+				})
+			end
+		end)
+
+		CancelEvent()
+	end
 end)
 
 -- Default commands
@@ -349,7 +349,7 @@ TriggerEvent('es:addCommand', 'admin', function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "SYSTEM", {255, 0, 0}, "Group: ^*^2 " .. user.getGroup())
 end, {help = "Shows what admin level you are and what group you're in"})
 
--- Default commands
+-- Report to admins
 TriggerEvent('es:addCommand', 'report', function(source, args, user)
 	TriggerClientEvent('chatMessage', source, "REPORT", {255, 0, 0}, " (^2" .. GetPlayerName(source) .." | "..source.."^0) " .. table.concat(args, " "))
 
@@ -447,7 +447,6 @@ end, function(source, args, user)
 end, {help = "Freeze or unfreeze a user", params = {{name = "userid", help = "The ID of the player"}}})
 
 -- Bring
-local frozen = {}
 TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
 	if args[1] then
 		if(GetPlayerName(tonumber(args[1])))then
@@ -471,8 +470,7 @@ end, function(source, args, user)
 	TriggerClientEvent('chat:addMessage', source, { args = {"^1SYSTEM", "Insufficienct permissions!"} })
 end, {help = "Teleport a user to you", params = {{name = "userid", help = "The ID of the player"}}})
 
--- Bring
-local frozen = {}
+-- Slap
 TriggerEvent('es:addGroupCommand', 'slap', "admin", function(source, args, user)
 	if args[1] then
 		if(GetPlayerName(tonumber(args[1])))then
@@ -496,8 +494,7 @@ end, function(source, args, user)
 	TriggerClientEvent('chat:addMessage', source, { args = {"^1SYSTEM", "Insufficienct permissions!"} })
 end, {help = "Slap a user", params = {{name = "userid", help = "The ID of the player"}}})
 
--- Freezing
-local frozen = {}
+-- Goto
 TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 	if args[1] then
 		if(GetPlayerName(tonumber(args[1])))then
@@ -529,7 +526,7 @@ TriggerEvent('es:addCommand', 'die', function(source, args, user)
 	TriggerClientEvent('chat:addMessage', source, { args = {"^1SYSTEM", "You killed yourself"} })
 end, {help = "Suicide"})
 
--- Killing
+-- Slay a player
 TriggerEvent('es:addGroupCommand', 'slay', "admin", function(source, args, user)
 	if args[1] then
 		if(GetPlayerName(tonumber(args[1])))then
