@@ -1,8 +1,6 @@
--- Manifest
-resource_manifest_version 'f15e72ec-3972-4fe4-9c7d-afc5394ae207'
+resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 
--- Requiring essentialmode
-dependency 'essentialmode'
+description 'Admin tool for ES'
 
 client_script 'client.lua'
 server_script 'server.lua'
@@ -13,3 +11,5 @@ files {
 	'ui/index.html',
 	'ui/style.css'
 }
+
+dependency 'essentialmode'
