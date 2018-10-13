@@ -39,7 +39,7 @@ end
 function loadExistingPlayers()
 	TriggerEvent("es:getPlayers", function(curPlayers)
 		for k,v in pairs(curPlayers)do
-			TriggerClientEvent("es_admin:setGroup", v.source, v.group)
+			TriggerClientEvent("es_admin:setGroup", v.get('source'), v.get('group'))
 		end
 	end)
 end
@@ -177,7 +177,7 @@ AddEventHandler('es_admin:set', function(t, USER, GROUP)
 								TriggerClientEvent('chatMessage', -1, "CONSOLE", {0, 0, 0}, "Permission level of ^2" .. GetPlayerName(tonumber(USER)) .. "^0 has been set to ^2 " .. tostring(GROUP))
 							end
 						end)
-						
+
 						TriggerClientEvent('chat:addMessage', Source, {
 							args = {"^1SYSTEM", "Permission level of ^2" .. GetPlayerName(tonumber(USER)) .. "^0 has been set to ^2 " .. tostring(GROUP)}
 						})
