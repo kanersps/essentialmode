@@ -177,10 +177,10 @@ AddEventHandler('es_admin:set', function(t, USER, GROUP)
 								TriggerClientEvent('chatMessage', -1, "CONSOLE", {0, 0, 0}, "Permission level of ^2" .. GetPlayerName(tonumber(USER)) .. "^0 has been set to ^2 " .. tostring(GROUP))
 							end
 						end)
-							TriggerClientEvent('chat:addMessage', Source, {
-								args = {"^1SYSTEM", "Permission level of ^2" .. GetPlayerName(tonumber(USER)) .. "^0 has been set to ^2 " .. tostring(GROUP)}
-							})
-						end)	
+						
+						TriggerClientEvent('chat:addMessage', Source, {
+							args = {"^1SYSTEM", "Permission level of ^2" .. GetPlayerName(tonumber(USER)) .. "^0 has been set to ^2 " .. tostring(GROUP)}
+						})
 					else
 						TriggerClientEvent('chat:addMessage', Source, {
 							args = {"^1SYSTEM", "Invalid integer entered"}
