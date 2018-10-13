@@ -219,23 +219,6 @@ function db.doesUserExist(identifier, callback)
 	end
 end
 
-function db.doesLicensedUserExist(license, callback)
-	if settings.defaultSettings.enableCustomData ~= '1' then
-		if license ~= nil and type(license) == "string" then
-			requestDB('POST', 'essentialmode/_find', {selector = {["license"] = license}}, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
-				local doc =  json.decode(rText).docs[1]
-				if callback then
-					if doc then callback(true) else callback(false) end
-				end
-			end)
-		else
-			print("Error occurred while retrieving licensed user, missing parameter or incorrect parameter: license")
-		end
-	else
-		TriggerEvent('es_db:doesLicensedUserExist', license, callback)
-	end
-end
-
 function db.retrieveUser(identifier, callback)
 	if settings.defaultSettings.enableCustomData ~= '1' then
 		if identifier ~= nil and type(identifier) == "string" then
@@ -250,23 +233,6 @@ function db.retrieveUser(identifier, callback)
 		end
 	else
 		TriggerEvent('es_db:retrieveUser', identifier, callback)
-	end
-end
-
-function db.retrieveLicensedUser(license, callback)
-	if settings.defaultSettings.enableCustomData ~= '1' then
-		if license ~= nil and type(license) == "string" then
-			requestDB('POST', 'essentialmode/_find', {selector = {["license"] = license}}, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
-				local doc =  json.decode(rText).docs[1]
-				if callback then
-					if doc then callback(doc) else callback(false) end
-				end
-			end)
-		else
-			print("Error occurred while retrieving user, missing parameter or incorrect parameter: license")
-		end
-	else
-		TriggerEvent('es_db:retrieveLicensedUser', license, callback)
 	end
 end
 

@@ -45,25 +45,6 @@ function LoadUser(identifier, source, new, licenseNotRequired)
 	end)
 end
 
-function LoadLicenseUser(license, source, id)
-	local Source = source
-	db.retrieveLicensedUser(license, function(user)
-		Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.license, user.group)
-		Users[Source].setSessionVar('idType', 'license')
-
-		TriggerEvent('es:playerLoaded', Source, Users[Source])
-
-		log('User (' .. license .. ') loaded')
-
-		TriggerClientEvent('es:setPlayerDecorator', Source, 'rank', Users[Source]:getPermissions())
-		TriggerClientEvent('es:setMoneyIcon', Source,settings.defaultSettings.moneyIcon)
-
-		for k,v in pairs(commandSuggestions) do
-			TriggerClientEvent('chat:addSuggestion', Source, settings.defaultSettings.commandDelimeter .. k, v.help, v.params)
-		end
-	end)
-end
-
 function getPlayerFromId(id)
 	return Users[id]
 end
@@ -81,32 +62,6 @@ function registerUser(identifier, source)
 			db.createUser(identifier, license, function(r, user)
 				LoadUser(identifier, Source, true)
 			end)
-			--[[
-			local license
-
-			for k,v in ipairs(GetPlayerIdentifiers(Source))do
-				if string.sub(v, 1, string.len("license:")) == "license:" then
-					license = v
-					break
-				end
-			end
-
-			if license then
-				db.doesLicensedUserExist(license, function(exists)
-					if exists then
-						LoadLicenseUser(license, Source, identifier)
-					else
-						db.createUser(identifier, license, function(r, user)
-							LoadUser(identifier, Source, true)
-						end)
-					end
-				end)
-			else
-				db.createUser(identifier, "", function(r, user)
-					LoadUser(identifier, Source, true)
-				end)
-			end
-			]]
 		end
 	end)
 end
