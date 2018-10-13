@@ -101,7 +101,7 @@ AddEventHandler('es_admin:quick', function(id, type)
 						if type == "slap" then TriggerClientEvent('es_admin:quick', id, type) end
 						if type == "slay" then TriggerClientEvent('es_admin:quick', id, type) end
 						if type == "kick" then DropPlayer(id, 'Kicked by es_admin GUI') end
-					
+
 						if type == "ban" then
 							for k,v in ipairs(GetPlayerIdentifiers(id))do
 								banUser(v)
@@ -163,6 +163,10 @@ AddEventHandler('es_admin:set', function(t, USER, GROUP)
 					GROUP = tonumber(GROUP)
 					if(GROUP ~= nil and GROUP > -1)then
 						TriggerEvent("es:setPlayerData", USER, "permission_level", GROUP, function(response, success)
+							if(true)then
+								TriggerClientEvent('chatMessage', -1, "CONSOLE", {0, 0, 0}, "Permission level of ^2" .. GetPlayerName(tonumber(USER)) .. "^0 has been set to ^2 " .. tostring(GROUP))
+							end
+						end)
 							TriggerClientEvent('chat:addMessage', Source, {
 								args = {"^1SYSTEM", "Permission level of ^2" .. GetPlayerName(tonumber(USER)) .. "^0 has been set to ^2 " .. tostring(GROUP)}
 							})
@@ -214,7 +218,7 @@ AddEventHandler('es_admin:set', function(t, USER, GROUP)
 				})
 			end
 		end)
-	end)	
+	end)
 end)
 
 -- Rcon commands
@@ -376,7 +380,7 @@ end, {help = "Enable or disable noclip"})
 -- Kicking
 TriggerEvent('es:addGroupCommand', 'kick', "mod", function(source, args, user)
 	if args[1] then
-		if(GetPlayerName(tonumber(args[1])))then
+		if(tonumber(args[1]) and GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
 
 			-- User permission check
@@ -414,7 +418,7 @@ end, {help = "Announce a message to the entire server", params = {{name = "annou
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'freeze', "mod", function(source, args, user)
 	if args[1] then
-		if(GetPlayerName(tonumber(args[1])))then
+		if(tonumber(args[1]) and GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
 
 			-- User permission check
@@ -450,7 +454,7 @@ end, {help = "Freeze or unfreeze a user", params = {{name = "userid", help = "Th
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'bring', "mod", function(source, args, user)
 	if args[1] then
-		if(GetPlayerName(tonumber(args[1])))then
+		if(tonumber(args[1]) and GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
 
 			-- User permission check
@@ -475,7 +479,7 @@ end, {help = "Teleport a user to you", params = {{name = "userid", help = "The I
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'slap', "admin", function(source, args, user)
 	if args[1] then
-		if(GetPlayerName(tonumber(args[1])))then
+		if(tonumber(args[1]) and GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
 
 			-- User permission check
@@ -500,7 +504,7 @@ end, {help = "Slap a user", params = {{name = "userid", help = "The ID of the pl
 local frozen = {}
 TriggerEvent('es:addGroupCommand', 'goto', "mod", function(source, args, user)
 	if args[1] then
-		if(GetPlayerName(tonumber(args[1])))then
+		if(tonumber(args[1]) and GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
 
 			-- User permission check
@@ -532,7 +536,7 @@ end, {help = "Suicide"})
 -- Killing
 TriggerEvent('es:addGroupCommand', 'slay', "admin", function(source, args, user)
 	if args[1] then
-		if(GetPlayerName(tonumber(args[1])))then
+		if(tonumber(args[1]) and GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
 
 			-- User permission check
@@ -556,7 +560,7 @@ end, {help = "Slay a user", params = {{name = "userid", help = "The ID of the pl
 -- Crashing
 TriggerEvent('es:addGroupCommand', 'crash', "superadmin", function(source, args, user)
 	if args[1] then
-		if(GetPlayerName(tonumber(args[1])))then
+		if(tonumber(args[1]) and GetPlayerName(tonumber(args[1])))then
 			local player = tonumber(args[1])
 
 			-- User permission check
