@@ -36,6 +36,16 @@ function loadBans()
 	end
 end
 
+function loadExistingPlayers()
+	TriggerEvent("es:getPlayers", function(curPlayers)
+		for k,v in pairs(curPlayers)do
+			TriggerClientEvent("es_admin:setGroup", v.source, v.group)
+		end
+	end)
+end
+
+loadExistingPlayers()
+
 function isBanned(id)
 	return bannedTable[id]
 end
