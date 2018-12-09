@@ -164,6 +164,10 @@ AddEventHandler('chatMessage', function(source, n, message)
 		end
 	else
 		TriggerEvent('es:chatMessage', source, message, Users[source])
+
+		if WasEventCanceled() then
+			CancelEvent()
+		end
 	end
 end)
 
