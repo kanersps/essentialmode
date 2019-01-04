@@ -75,20 +75,6 @@ AddEventHandler("playerSpawned", function()
 		DecorSetInt(PlayerPedId(), k, v)
 	end
 
-	if enableNative[1] then
-		N_0xc2d15bef167e27bc()
-		SetPlayerCashChange(1, 0)
-		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		SetPlayerCashChange(-1, 0)
-	end
-
-	if enableNative[2] then
-		SetMultiplayerBankCash()
-		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		SetPlayerCashChange(0, 1)
-		SetPlayerCashChange(0, -1)
-	end
-
 	TriggerServerEvent('playerSpawn')
 end)
 
@@ -112,18 +98,14 @@ RegisterNetEvent('es:displayMoney')
 AddEventHandler('es:displayMoney', function(a)
 	enableNative[1] = true
 
-	-- Found by FiveM forum user @Lobix300
-	N_0xc2d15bef167e27bc()
-	SetPlayerCashChange(1, 0)
-	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-	SetPlayerCashChange(a, 0)
+    SetMultiplayerHudCash(a, 0)
+    StatSetInt(GetHashKey("MP0_WALLET_BALANCE"), a)
 end)
 
 RegisterNetEvent('es:displayBank')
 AddEventHandler('es:displayBank', function(a)
 	enableNative[2] = true
 
-	-- Found by FiveM forum user @Lobix300
 	SetMultiplayerBankCash()
 	SetPlayerCashChange(0, 1)
 	Citizen.InvokeNative(0x170F541E1CADD1DE, true)
@@ -131,7 +113,7 @@ AddEventHandler('es:displayBank', function(a)
 end)
 
 RegisterNetEvent("es:addedMoney")
-AddEventHandler("es:addedMoney", function(m, native)
+AddEventHandler("es:addedMoney", function(m, native, current)
 
 	if not native then
 		SendNUIMessage({
@@ -139,8 +121,8 @@ AddEventHandler("es:addedMoney", function(m, native)
 			money = m
 		})
 	else
-		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		SetPlayerCashChange(math.floor(m), 0)
+		SetMultiplayerHudCash(current, 0)
+		StatSetInt(GetHashKey("MP0_WALLET_BALANCE"), current)
 	end
 
 end)
@@ -153,8 +135,8 @@ AddEventHandler("es:removedMoney", function(m, native, current)
 			money = m
 		})
 	else
-		Citizen.InvokeNative(0x170F541E1CADD1DE, true)
-		SetPlayerCashChange(-math.floor(m), 0)
+		SetMultiplayerHudCash(current, 0)
+		StatSetInt(GetHashKey("MP0_WALLET_BALANCE"), current)
 	end
 end)
 

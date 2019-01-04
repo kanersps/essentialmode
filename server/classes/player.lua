@@ -32,12 +32,13 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 			self.money = m
 
 			if((prevMoney - newMoney) < 0)then
-				TriggerClientEvent("es:addedMoney", self.source, math.abs(prevMoney - newMoney), tonumber(settings.defaultSettings.nativeMoneySystem))
+				TriggerClientEvent("es:addedMoney", self.source, math.abs(prevMoney - newMoney), (settings.defaultSettings.nativeMoneySystem == "1"))
 			else
-				TriggerClientEvent("es:removedMoney", self.source, math.abs(prevMoney - newMoney), tonumber(settings.defaultSettings.nativeMoneySystem))
+				TriggerClientEvent("es:removedMoney", self.source, math.abs(prevMoney - newMoney), (settings.defaultSettings.nativeMoneySystem == "1"))
 			end
 
 			if settings.defaultSettings.nativeMoneySystem == "0" then
+				print("setmoney!!!!!!!!!!")
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else
@@ -83,8 +84,9 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 
 			self.money = newMoney
 
-			TriggerClientEvent("es:addedMoney", self.source, m, tonumber(settings.defaultSettings.nativeMoneySystem))
+			TriggerClientEvent("es:addedMoney", self.source, m, (settings.defaultSettings.nativeMoneySystem == "1"), self.money)
 			if settings.defaultSettings.nativeMoneySystem == "0" then
+				print("addmoney!!!!!!!!!!")
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else
@@ -99,8 +101,9 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 
 			self.money = newMoney
 
-			TriggerClientEvent("es:removedMoney", self.source, m, tonumber(settings.defaultSettings.nativeMoneySystem))
-			if settings.defaultSettings.nativeMoneySystem ~= "0" then
+			TriggerClientEvent("es:removedMoney", self.source, m, (settings.defaultSettings.nativeMoneySystem == "1"), self.money)
+			if settings.defaultSettings.nativeMoneySystem == "0" then
+				print("removemoney!!!!!!!!!!")
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else
@@ -134,11 +137,12 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	end
 
 	rTable.displayMoney = function(m)
-		if type(m) == "number" then	
+		if type(m) == "number" then
 			if not self.moneyDisplayed then
 				if settings.defaultSettings.nativeMoneySystem ~= "0" then
 					TriggerClientEvent("es:displayMoney", self.source, math.floor(m))
 				else
+					print("displaymoney!!!!!!!!!!")
 					TriggerClientEvent('es:activateMoney', self.source , self.money)
 				end
 				
