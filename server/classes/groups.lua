@@ -79,7 +79,7 @@ user = Group("user", "")
 admin = Group("admin", "user")
 superadmin = Group("superadmin", "admin")
 
--- Developer, unused
+-- Developer, unused by default only for developer
 dev = Group("_dev", "superadmin")
 
 -- Custom groups
