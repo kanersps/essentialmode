@@ -86,6 +86,16 @@ dev = Group("_dev", "superadmin")
 AddEventHandler("es:addGroup", function(group, inherit, aceGroup)
 	if(type(aceGroup) ~= "string") then aceGroup = "user" end
 
+	if(type(group) ~= "string")then
+		log('ES_ERROR: There seems to be an issue while creating a new group, please make sure that you entered a correct "group" as "string"')
+		print('ES_ERROR: There seems to be an issue while creating a new group, please make sure that you entered a correct "group" as "string"')
+	end
+
+	if(type(inherit) ~= "string")then
+		log('ES_ERROR: There seems to be an issue while creating a new group, please make sure that you entered a correct "inherit" as "string"')
+		print('ES_ERROR: There seems to be an issue while creating a new group, please make sure that you entered a correct "inherit" as "string"')
+	end
+
 	if(inherit == _user)then
 		_user = group
 		groups['admin'].inherits = group
