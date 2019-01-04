@@ -138,7 +138,7 @@ AddEventHandler('chatMessage', function(source, n, message)
 					command.callbackfailed(source, command_args, Users[source])
 					TriggerEvent("es:adminCommandFailed", source, command_args, Users[source])
 
-					if(type(settings.defaultSettings.permissionDenied) == "string" and not WasEventCanceled())then
+					if(type(settings.defaultSettings.permissionDenied) ~= "false" and not WasEventCanceled())then
 						TriggerClientEvent('chatMessage', source, "", {0,0,0}, defaultSettings.permissionDenied)
 					end
 

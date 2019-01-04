@@ -186,7 +186,7 @@ db.requestDB = requestDB
 function db.createUser(identifier, license, callback)
 	if settings.defaultSettings.enableCustomData ~= '1' then
 		if type(identifier) == "string" and identifier ~= nil then
-			createDocument({ identifier = identifier, license = license, money = settings.defaultSettings.startingCash or 0, bank = settings.defaultSettings.startingBank or 0, group = "user", permission_level = 0 }, function(returned, document)
+			createDocument({ identifier = identifier, license = license, money = tonumber(settings.defaultSettings.startingCash) or 0, bank = tonumber(settings.defaultSettings.startingBank) or 0, group = "user", permission_level = 0 }, function(returned, document)
 				if callback then
 					callback(returned, document)
 				end
@@ -195,7 +195,7 @@ function db.createUser(identifier, license, callback)
 			print("Error occurred while creating user, missing parameter or incorrect parameter: identifier")
 		end
 	else
-		TriggerEvent('es_db:createUser', identifier, license, settings.defaultSettings.startingCash, settings.defaultSettings.startingBank, callback)
+		TriggerEvent('es_db:createUser', identifier, license, tonumber(settings.defaultSettings.startingCash), tonumber(settings.defaultSettings.startingBank), callback)
 	end
 end
 

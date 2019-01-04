@@ -32,12 +32,12 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 			self.money = m
 
 			if((prevMoney - newMoney) < 0)then
-				TriggerClientEvent("es:addedMoney", self.source, math.abs(prevMoney - newMoney), settings.defaultSettings.nativeMoneySystem)
+				TriggerClientEvent("es:addedMoney", self.source, math.abs(prevMoney - newMoney), tonumber(settings.defaultSettings.nativeMoneySystem))
 			else
-				TriggerClientEvent("es:removedMoney", self.source, math.abs(prevMoney - newMoney), settings.defaultSettings.nativeMoneySystem)
+				TriggerClientEvent("es:removedMoney", self.source, math.abs(prevMoney - newMoney), tonumber(settings.defaultSettings.nativeMoneySystem))
 			end
 
-			if not settings.defaultSettings.nativeMoneySystem then
+			if not tonumber(settings.defaultSettings.nativeMoneySystem) then
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else

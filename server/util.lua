@@ -9,15 +9,14 @@ commands = {}
 settings = {}
 settings.defaultSettings = {
 	['pvpEnabled'] = false,
-	['permissionDenied'] = false,
-	['debugInformation'] = false,
-	['startingCash'] = 0,
-	['startingBank'] = 0,
-	['enableRankDecorators'] = false,
-	['moneyIcon'] = "$",
-	['nativeMoneySystem'] = false,
-	['commandDelimeter'] = '/',
-	['enableLogging'] = false,
+	['permissionDenied'] = GetConvar('es_permissionDenied', 'false'),
+	['startingCash'] = GetConvar('es_startingCash', '0'),
+	['startingBank'] = GetConvar('es_startingBank', '0'),
+	['enableRankDecorators'] = GetConvar('es_enableRankDecorators', 'false'),
+	['moneyIcon'] = GetConvar('es_moneyIcon', '$'),
+	['nativeMoneySystem'] = GetConvar('es_nativeMoneySystem', '0'),
+	['commandDelimeter'] = GetConvar('es_commandDelimeter', '/'),
+	['enableLogging'] = GetConvar('es_enableLogging', 'false'),
 	['enableCustomData'] = GetConvar('es_enableCustomData', 'false')
 }
 settings.sessionSettings = {}
@@ -77,13 +76,13 @@ function doesLogExist(cb)
 end
 
 Citizen.CreateThread(function()
-	if settings.defaultSettings.enableLogging then doesLogExist(function()end) end
+	if settings.defaultSettings.enableLogging ~= "false" then doesLogExist(function()end) end
 	return
 end)
 
 
 function log(log)
-	if settings.defaultSettings.enableLogging then
+	if settings.defaultSettings.enableLogging ~= "false" then
 		Citizen.CreateThread(function()
 			local file = LoadResourceFile(GetCurrentResourceName(), "logs/" .. string.gsub(os.date('%x'), '(/)', '-') .. ".txt")
 			if file then

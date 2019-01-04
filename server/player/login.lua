@@ -14,7 +14,9 @@ function LoadUser(identifier, source, new, licenseNotRequired)
 
 			log('User (' .. identifier .. ') loaded')
 
+			if(settings.defaultSettings.enableRankDecorators ~= "false")then
 			TriggerClientEvent('es:setPlayerDecorator', Source, 'rank', Users[Source]:getPermissions())
+			end
 			TriggerClientEvent('es:setMoneyIcon', Source,settings.defaultSettings.moneyIcon)
 
 			for k,v in pairs(commandSuggestions) do
