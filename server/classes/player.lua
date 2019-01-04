@@ -37,7 +37,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 				TriggerClientEvent("es:removedMoney", self.source, math.abs(prevMoney - newMoney), tonumber(settings.defaultSettings.nativeMoneySystem))
 			end
 
-			if not tonumber(settings.defaultSettings.nativeMoneySystem) then
+			if settings.defaultSettings.nativeMoneySystem == "0" then
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else
@@ -83,8 +83,8 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 
 			self.money = newMoney
 
-			TriggerClientEvent("es:addedMoney", self.source, m, settings.defaultSettings.nativeMoneySystem)
-			if not settings.defaultSettings.nativeMoneySystem then
+			TriggerClientEvent("es:addedMoney", self.source, m, tonumber(settings.defaultSettings.nativeMoneySystem))
+			if settings.defaultSettings.nativeMoneySystem == "0" then
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else
@@ -99,8 +99,8 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 
 			self.money = newMoney
 
-			TriggerClientEvent("es:removedMoney", self.source, m, settings.defaultSettings.nativeMoneySystem)
-			if not settings.defaultSettings.nativeMoneySystem then
+			TriggerClientEvent("es:removedMoney", self.source, m, tonumber(settings.defaultSettings.nativeMoneySystem))
+			if settings.defaultSettings.nativeMoneySystem ~= "0" then
 				TriggerClientEvent('es:activateMoney', self.source , self.money)
 			end
 		else
@@ -136,7 +136,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	rTable.displayMoney = function(m)
 		if type(m) == "number" then	
 			if not self.moneyDisplayed then
-				if settings.defaultSettings.nativeMoneySystem then
+				if settings.defaultSettings.nativeMoneySystem ~= "0" then
 					TriggerClientEvent("es:displayMoney", self.source, math.floor(m))
 				else
 					TriggerClientEvent('es:activateMoney', self.source , self.money)
