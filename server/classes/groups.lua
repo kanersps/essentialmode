@@ -108,7 +108,6 @@ AddEventHandler("es:addGroup", function(group, inherit, aceGroup)
 end)
 
 -- Can target function, mainly for exports
-_P3 = "33f774893e"
 function canGroupTarget(group, targetGroup, cb)
 	if groups[group] and groups[targetGroup] then
 		if cb then
