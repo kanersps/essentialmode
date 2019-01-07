@@ -4,40 +4,69 @@
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 
 _VERSION = '5.2.1'
+_FirstCheckPerformed = false
+_UUID = LoadResourceFile(GetCurrentResourceName(), "uuid") or "unknown"
 
 -- Server
 
 -- Version check
-local VersionAPIRequest = "https://api.kanersps.pw/em/version?version=" .. _VERSION .. "&uuid=" .. (LoadResourceFile(GetCurrentResourceName(), "uuid") or "unknown")
-print("Performing version check against: " .. VersionAPIRequest)
-PerformHttpRequest(VersionAPIRequest, function(err, rText, headers)
-	print("\nCurrent version: " .. _VERSION)
+local VersionAPIRequest = "https://api.kanersps.pw/em/version?version=" .. _VERSION .. "&uuid=" .. _UUID
 
-	local decoded = json.decode(rText)
+function performVersionCheck()
+	print("Performing version check against: " .. VersionAPIRequest .. "\n")
+	PerformHttpRequest(VersionAPIRequest, function(err, rText, headers)		local decoded = json.decode(rText)
 
-	if err == 200 then
-		print("Updater version: " .. decoded.newVersion .. "\n")
-		
-		if(decoded.uuid)then
-			SaveResourceFile(GetCurrentResourceName(), "uuid", decoded.uuid, -1)
-		end
+		if err == 200 then
+			if(not _FirstCheckPerformed)then
+				print("\n[EssentialMode] Current version: " .. _VERSION)
+				print("[EssentialMode] Updater version: " .. decoded.newVersion .. "\n")
+			end
+			
+			if(decoded.uuid)then
+				SaveResourceFile(GetCurrentResourceName(), "uuid", decoded.uuid, -1)
 
-		if not decoded.updated then
-			print("Changelog: \n" .. decoded.changes .. "\n")
-			print("You're not running the newest stable version of EssentialMode please update:\n" .. decoded.updateLocation)
-			log('Version mismatch was detected, updater version: ' .. rText .. '(' .. _VERSION .. ')')
+				_UUID = decoded.uuid
+				if(not _FirstCheckPerformed)then
+					ExecuteCommand("sets EssentialModeUUID " .. _UUID)
+					ExecuteCommand("sets EssentialModeVersion " .. _VERSION)
+					_FirstCheckPerformed = true
+				end
+			end
 
-			if decoded.extra then
-				print(decoded.extra)
+			if not decoded.updated then
+				print("\n[EssentialMode] Current version: " .. _VERSION)
+				print("[EssentialMode] Updater version: " .. decoded.newVersion .. "\n")
+
+				print("[EssentialMode] Changelog: \n" .. decoded.changes .. "\n")
+				print("[EssentialMode] You're not running the newest stable version of EssentialMode please update:\n" .. decoded.updateLocation)
+				log('Version mismatch was detected, updater version: ' .. rText .. '(' .. _VERSION .. ')')
+
+				if decoded.extra then
+					print(decoded.extra)
+				end
+			else
+				print("[EssentialMode] Everything is nice and updated!\n")
 			end
 		else
-			print("Everything is fine!\n")
+			print("[EssentialMode] Updater version: UPDATER UNAVAILABLE")
+			print("[EssentialMode] This could be your internet connection or that the update server is not running. This won't impact the server\n\n")
+		
+			if(not _FirstCheckPerformed)then
+				ExecuteCommand("sets EssentialModeUUID " .. _UUID)
+				ExecuteCommand("sets EssentialModeVersion " .. _VERSION)
+				_FirstCheckPerformed = true
+			end
 		end
-	else
-		print("Updater version: UPDATER UNAVAILABLE")
-		print("This could be your internet connection or that the update server is not running. This won't impact the server\n\n")
+	end, "GET", "", {what = 'this'})
+end
+
+-- Perform version check periodically while server is running. To notify of updates.
+Citizen.CreateThread(function()
+	while true do
+		performVersionCheck()
+		Citizen.Wait(1200000)
 	end
-end, "GET", "", {what = 'this'})
+end)
 
 AddEventHandler('playerDropped', function()
 	local Source = source
