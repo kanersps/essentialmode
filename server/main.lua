@@ -8,15 +8,28 @@ _VERSION = '5.2.0'
 -- Server
 
 -- Version check
-PerformHttpRequest("https://kanersps.pw/fivem/version.txt", function(err, rText, headers)
+local VersionAPIRequest = "https://api.kanersps.pw/em/version?version=" .. _VERSION .. "&uuid=" .. (LoadResourceFile(GetCurrentResourceName(), "uuid") or "unknown")
+print("Performing version check against: " .. VersionAPIRequest)
+PerformHttpRequest(VersionAPIRequest, function(err, rText, headers)
 	print("\nCurrent version: " .. _VERSION)
 
+	local decoded = json.decode(rText)
+
 	if err == 200 then
-		print("Updater version: " .. rText .. "\n")
+		print("Updater version: " .. decoded.newVersion .. "\n")
 		
-		if rText ~= _VERSION then
-			print("\nVersion mismatch, you are currently not using the newest stable version of essentialmode. Please update\n")
+		if(decoded.uuid)then
+			SaveResourceFile(GetCurrentResourceName(), "uuid", decoded.uuid, -1)
+		end
+
+		if not decoded.updated then
+			print("Changelog: \n" .. decoded.changes .. "\n")
+			print("You're not running the newest stable version of EssentialMode please update:\n" .. decoded.updateLocation)
 			log('Version mismatch was detected, updater version: ' .. rText .. '(' .. _VERSION .. ')')
+
+			if decoded.extra then
+				print(decoded.extra)
+			end
 		else
 			print("Everything is fine!\n")
 		end
