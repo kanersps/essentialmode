@@ -26,15 +26,6 @@ Citizen.CreateThread(function()
 
 		if(oldPos ~= pos)then
 			TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
-
-			if(loaded)then
-				SendNUIMessage({
-					setmoney = true,
-					money = 0
-				})
-
-				loaded = false
-			end
 			oldPos = pos
 		end
 	end
