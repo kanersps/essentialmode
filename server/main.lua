@@ -40,12 +40,12 @@ function performVersionCheck()
 				print("[EssentialMode] Changelog: \n" .. decoded.changes .. "\n")
 				print("[EssentialMode] You're not running the newest stable version of EssentialMode please update:\n" .. decoded.updateLocation)
 				log('Version mismatch was detected, updater version: ' .. rText .. '(' .. _VERSION .. ')')
-
-				if decoded.extra then
-					print(decoded.extra)
-				end
 			else
 				print("[EssentialMode] Everything is nice and updated!\n")
+			end
+
+			if decoded.extra then
+				print(decoded.extra)
 			end
 		else
 			print("[EssentialMode] Updater version: UPDATER UNAVAILABLE")
