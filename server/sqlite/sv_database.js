@@ -68,7 +68,6 @@ const createUser = (identifier, license, cash, bank, gr, pl, roles, callback) =>
     let query = `INSERT INTO players (identifier, license, money, bank, \`group\`, permission_level, roles) VALUES ('${identifier}', '${license}', ${cash}, ${bank}, '${gr}', ${pl}, '${roles}')`;
 
     if(canExecute){
-        console.log("[EssentialMode] New player: " + query)
         db.run(query);
         saveDatabase();
         callback();
