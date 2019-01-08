@@ -130,6 +130,3 @@ on("es_sqlite:retrieveUser", retrieveUser)
 // Save database every 60 seconds or manually by event
 setInterval(saveDatabase, 60000)
 on("es_sqlite:save", saveDatabase)
-
-exports("sqliteInitialize", checkDatabase)
-exports("sqliteUpdateUser", updateUser);
