@@ -6,7 +6,11 @@
 -- Loads the user when called, only ever needs to get called once
 function LoadUser(identifier, source, new, licenseNotRequired)
 	local Source = source
-	db.retrieveUser(identifier, function(user)
+	db.retrieveUser(identifier, function(user, isJson)
+		if isJson then
+			user = json.decode(user)
+		end
+
 		if user.license or licenseNotRequired then
 			-- Creates the player class for OOP imitation and then sets a var to say which idType was used (This isn't relevant anymore)
 			Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.license, user.group, user.roles or "")
@@ -73,7 +77,15 @@ function registerUser(identifier, source)
 		if exists then
 			LoadUser(identifier, Source, false)
 		else
-			db.createUser(identifier, license, function(r, user)
+			local license
+			for k,v in ipairs(GetPlayerIdentifiers(Source))do
+				if string.sub(v, 1, string.len("license:")) == "license:" then
+					license = v
+					break
+				end
+			end
+
+			db.createUser(identifier, license, function()
 				LoadUser(identifier, Source, true)
 			end)
 		end
