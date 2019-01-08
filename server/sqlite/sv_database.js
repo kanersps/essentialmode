@@ -34,6 +34,8 @@ const checkDatabase = (cb) => {
 }
 
 const saveDatabase = (cb) => {
+    if(!canExecute)
+        return;
     fs.writeFile(databaseFile, db.export(), (err) => {
         if(err)
             console.log(err);

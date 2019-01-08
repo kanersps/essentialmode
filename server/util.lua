@@ -18,7 +18,7 @@ settings.defaultSettings = {
 	['commandDelimeter'] = GetConvar('es_commandDelimeter', '/'),
 	['enableLogging'] = GetConvar('es_enableLogging', 'false'),
 	['enableCustomData'] = GetConvar('es_enableCustomData', 'false'),
-	['defaultDatabase'] = GetConvar('es_enableCustomData', '1')
+	['defaultDatabase'] = GetConvar('es_defaultDatabase', '1')
 }
 settings.sessionSettings = {}
 commandSuggestions = {}
