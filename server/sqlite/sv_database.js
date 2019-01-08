@@ -76,7 +76,9 @@ const createUser = (identifier, license, cash, bank, gr, pl, roles, callback) =>
     }else{
         console.log("[EssentialMode] Database not ready yet! (Recalling in 5 seconds)")
         if(!readying)
-            checkDatabase();
+            checkDatabase(() => {
+                canExecute = true
+            });
         setTimeout(() => {
             createUser(identifier, license, cash, bank, gr, pl, roles, callback);
         }, 5000)
@@ -94,7 +96,9 @@ const doesUserExist = (identifier, callback) => {
     }else{
         console.log("[EssentialMode] Database not ready yet! (Recalling in 5 seconds)")
         if(!readying)
-            checkDatabase();
+            checkDatabase(() => {
+                canExecute = true
+            });
         setTimeout(() => {
             doesUserExist(identifier, callback);
         }, 5000)
