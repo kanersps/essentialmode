@@ -199,7 +199,7 @@ function db.createUser(identifier, license, callback)
 			print("Error occurred while creating user, missing parameter or incorrect parameter: identifier")
 		end
 	elseif settings.defaultSettings.defaultDatabase == '1' then
-		TriggerEvent("es_sqlite:createUser", identifier, license, tonumber(settings.defaultSettings.startingCash), tonumber(settings.defaultSettings.startingBank), "", 0, "", callback)
+		TriggerEvent("es_sqlite:createUser", identifier, license, tonumber(settings.defaultSettings.startingCash), tonumber(settings.defaultSettings.startingBank), "user", 0, "", callback)
 	else
 		TriggerEvent('es_db:createUser', identifier, license, tonumber(settings.defaultSettings.startingCash), tonumber(settings.defaultSettings.startingBank), callback)
 	end
