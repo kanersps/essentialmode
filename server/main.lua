@@ -177,7 +177,7 @@ AddEventHandler('chatMessage', function(source, n, message)
 			local Source = source
 			CancelEvent()
 			if(command.perm > 0)then
-				if(Users[source].getPermissions() >= command.perm or groups[Users[source].getGroup()]:canTarget(command.group))then
+				if(IsPlayerAceAllowed(Source, "essentialmode.commands." .. command) or Users[source].getPermissions() >= command.perm or groups[Users[source].getGroup()]:canTarget(command.group))then
 					if (not (command.arguments == #command_args - 1) and command.arguments > -1) then
 						TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
 					else
