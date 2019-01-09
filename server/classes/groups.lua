@@ -79,6 +79,10 @@ user = Group("user", "")
 admin = Group("admin", "user")
 superadmin = Group("superadmin", "admin")
 
+-- ACL
+ExecuteCommand('add_principal group.admin group.user')
+ExecuteCommand('add_principal group.superadmin group.admin')
+
 -- Developer, unused by default only for developer
 dev = Group("_dev", "superadmin")
 
@@ -96,12 +100,16 @@ AddEventHandler("es:addGroup", function(group, inherit, aceGroup)
 		print('ES_ERROR: There seems to be an issue while creating a new group, please make sure that you entered a correct "inherit" as "string"')
 	end
 
+	ExecuteCommand('add_principal group.' .. group .. ' group.' .. inherit)
+
 	if(inherit == _user)then
 		_user = group
 		groups['admin'].inherits = group
+		ExecuteCommand('add_principal group.admin group.' .. group)
 	elseif(inherit == _admin)then
 		_admin = group
 		groups['superadmin'].inherits = group
+		ExecuteCommand('add_principal group.superadmin group.' .. group)
 	end
 
 	Group(group, inherit, aceGroup)
@@ -121,7 +129,7 @@ function canGroupTarget(group, targetGroup, cb)
 		else
 			return false
 		end
-	end	
+	end
 end
 
 -- Can target event handler

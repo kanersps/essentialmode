@@ -177,7 +177,7 @@ AddEventHandler('chatMessage', function(source, n, message)
 			local Source = source
 			CancelEvent()
 			if(command.perm > 0)then
-				if(IsPlayerAceAllowed(Source, "essentialmode.commands." .. command) or Users[source].getPermissions() >= command.perm or groups[Users[source].getGroup()]:canTarget(command.group))then
+				if(IsPlayerAceAllowed(Source, "command." .. command_args[1]) or Users[source].getPermissions() >= command.perm or groups[Users[source].getGroup()]:canTarget(command.group))then
 					if (not (command.arguments == #command_args - 1) and command.arguments > -1) then
 						TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
 					else
@@ -269,9 +269,11 @@ function addAdminCommand(command, perm, callback, callbackfailed, suggestion, ar
 	ExecuteCommand('add_ace group.superadmin command.' .. command .. ' allow')
 
 	RegisterCommand(command, function(source, args)
+		local Source = source
+
 		-- Console check
 		if(source ~= 0)then
-			if Users[source].getPermissions() >= perm then
+			if IsPlayerAceAllowed(Source, "command." .. command) or Users[source].getPermissions() >= perm then
 				if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
 					callback(source, args, Users[source])
 				else
@@ -314,9 +316,11 @@ function addGroupCommand(command, group, callback, callbackfailed, suggestion, a
 	ExecuteCommand('add_ace group.' .. group .. ' command.' .. command .. ' allow')
 
 	RegisterCommand(command, function(source, args)
+		local Source = source
+
 		-- Console check
 		if(source ~= 0)then
-			if groups[Users[source].getGroup()]:canTarget(group) then
+			if IsPlayerAceAllowed(Source, "command." .. command) or groups[Users[source].getGroup()]:canTarget(group) then
 				if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
 					callback(source, args, Users[source])
 				else
