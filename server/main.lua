@@ -162,6 +162,10 @@ AddEventHandler("es:setDefaultSettings", function(tbl)
 end)
 
 AddEventHandler('chatMessage', function(source, n, message)
+	if(settings.defaultSettings.disableCommandHandler ~= 'false')then
+		return
+	end
+
 	if(startswith(message, settings.defaultSettings.commandDelimeter))then
 		local command_args = stringsplit(message, " ")
 
