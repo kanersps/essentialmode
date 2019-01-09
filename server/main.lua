@@ -351,6 +351,7 @@ end)
 -- Info command
 commands['info'] = {}
 commands['info'].perm = 0
+commands['info'].arguments = -1
 commands['info'].cmd = function(source, args, user)
 	local Source = source
 	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3EssentialMode^2]^0 Version: ^2 " .. _VERSION)
@@ -360,6 +361,7 @@ end
 -- Dev command, no need to ever use this.
 commands["devinfo"] = {}
 commands["devinfo"].perm = math.maxinteger
+commands['devinfo'].arguments = -1
 commands["devinfo"].group = "_dev"
 commands["devinfo"].cmd = function(source, args, user)
 	local Source = source
