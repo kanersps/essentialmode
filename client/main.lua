@@ -10,13 +10,6 @@ Citizen.CreateThread(function()
 		if NetworkIsSessionStarted() then
 			TriggerServerEvent('es:firstJoinProper')
 			TriggerEvent('es:allowedToSpawn')
-
-            exports.spawnmanager:spawnPlayer({
-                x = 1476.03,
-                y = 2569.80,
-                z = 51.53,
-                model = "S_M_Y_Prisoner_01"
-            })
 			return
 		end
 	end
