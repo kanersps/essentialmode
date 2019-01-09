@@ -185,8 +185,8 @@ AddEventHandler('chatMessage', function(source, n, message)
 					command.callbackfailed(source, command_args, Users[source])
 					TriggerEvent("es:adminCommandFailed", source, command_args, Users[source])
 
-					if(type(settings.defaultSettings.permissionDenied) ~= "false" and not WasEventCanceled())then
-						TriggerClientEvent('chatMessage', source, "", {0,0,0}, defaultSettings.permissionDenied)
+					if(settings.defaultSettings.permissionDenied ~= "false" and not WasEventCanceled())then
+						TriggerClientEvent('chatMessage', source, "", {0,0,0}, settings.defaultSettings.permissionDenied)
 					end
 
 					log('User (' .. GetPlayerName(Source) .. ') tried to execute command without having permission: ' .. command_args[1])
@@ -355,7 +355,7 @@ commands['info'].arguments = -1
 commands['info'].cmd = function(source, args, user)
 	local Source = source
 	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3EssentialMode^2]^0 Version: ^2 " .. _VERSION)
-	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3EssentialMode^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 1))
+	TriggerClientEvent('chatMessage', Source, 'SYSTEM', {255, 0, 0}, "^2[^3EssentialMode^2]^0 Commands loaded: ^2 " .. (returnIndexesInTable(commands) - 2))
 end
 
 -- Dev command, no need to ever use this.
