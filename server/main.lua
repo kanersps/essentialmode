@@ -289,7 +289,7 @@ function addAdminCommand(command, perm, callback, callbackfailed, suggestion, ar
 				TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
 			end
 		end
-	end)
+	end, true)
 
 	debugMsg("Admin command added: " .. command .. ", requires permission level: " .. perm)
 end
@@ -336,7 +336,7 @@ function addGroupCommand(command, group, callback, callbackfailed, suggestion, a
 				TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
 			end
 		end
-	end)
+	end, true)
 
 	debugMsg("Group command added: " .. command .. ", requires group: " .. group)
 end
