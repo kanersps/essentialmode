@@ -184,7 +184,7 @@ AddEventHandler('chatMessage', function(source, n, message)
 					else
 						command.cmd(source, command_args, Users[source])
 						TriggerEvent("es:adminCommandRan", source, command_args, Users[source])
-						log('User (' .. GetPlayerName(Source) .. ') ran admin command ' .. command_args[1] .. ', with parameters: ' .. table.concat(command_args, ' '))
+						log('User (' .. GetPlayerName(Source) .. ') ran admin command ' .. command .. ', with parameters: ' .. table.concat(command_args, ' '))
 					end
 				else
 					command.callbackfailed(source, command_args, Users[source])
@@ -195,7 +195,7 @@ AddEventHandler('chatMessage', function(source, n, message)
 					end
 
 					log('User (' .. GetPlayerName(Source) .. ') tried to execute command without having permission: ' .. command_args[1])
-					debugMsg("Non admin (" .. GetPlayerName(Source) .. ") attempted to run admin command: " .. command_args[1])
+					debugMsg("Non admin (" .. GetPlayerName(Source) .. ") attempted to run admin command: " .. command)
 				end
 			else
 				table.remove(command_args, 1)
