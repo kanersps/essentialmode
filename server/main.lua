@@ -236,13 +236,15 @@ function addCommand(command, callback, suggestion, arguments)
 		commandSuggestions[command] = suggestion
 	end
 
-	RegisterCommand(command, function(source, args)
-		if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
-			callback(source, args, Users[source])
-		else
-			TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
-		end
-	end, false)
+	if(settings.defaultSettings.disableCommandHandler ~= 'false')then
+		RegisterCommand(command, function(source, args)
+			if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
+				callback(source, args, Users[source])
+			else
+				TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+			end
+		end, false)
+	end
 
 	debugMsg("Command added: " .. command)
 end
@@ -268,28 +270,30 @@ function addAdminCommand(command, perm, callback, callbackfailed, suggestion, ar
 
 	ExecuteCommand('add_ace group.superadmin command.' .. command .. ' allow')
 
-	RegisterCommand(command, function(source, args)
-		local Source = source
+	if(settings.defaultSettings.disableCommandHandler ~= 'false')then
+		RegisterCommand(command, function(source, args)
+			local Source = source
 
-		-- Console check
-		if(source ~= 0)then
-			if IsPlayerAceAllowed(Source, "command." .. command) or Users[source].getPermissions() >= perm then
+			-- Console check
+			if(source ~= 0)then
+				if IsPlayerAceAllowed(Source, "command." .. command) or Users[source].getPermissions() >= perm then
+					if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
+						callback(source, args, Users[source])
+					else
+						TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+					end
+				else
+					callbackfailed(source, args, Users[source])
+				end
+			else
 				if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
 					callback(source, args, Users[source])
 				else
 					TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
 				end
-			else
-				callbackfailed(source, args, Users[source])
 			end
-		else
-			if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
-				callback(source, args, Users[source])
-			else
-				TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
-			end
-		end
-	end, true)
+		end, true)
+	end
 
 	debugMsg("Admin command added: " .. command .. ", requires permission level: " .. perm)
 end
@@ -315,28 +319,30 @@ function addGroupCommand(command, group, callback, callbackfailed, suggestion, a
 
 	ExecuteCommand('add_ace group.' .. group .. ' command.' .. command .. ' allow')
 
-	RegisterCommand(command, function(source, args)
-		local Source = source
+	if(settings.defaultSettings.disableCommandHandler ~= 'false')then
+		RegisterCommand(command, function(source, args)
+			local Source = source
 
-		-- Console check
-		if(source ~= 0)then
-			if IsPlayerAceAllowed(Source, "command." .. command) or groups[Users[source].getGroup()]:canTarget(group) then
+			-- Console check
+			if(source ~= 0)then
+				if IsPlayerAceAllowed(Source, "command." .. command) or groups[Users[source].getGroup()]:canTarget(group) then
+					if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
+						callback(source, args, Users[source])
+					else
+						TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
+					end
+				else
+					callbackfailed(source, args, Users[source])
+				end
+			else
 				if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
 					callback(source, args, Users[source])
 				else
 					TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
 				end
-			else
-				callbackfailed(source, args, Users[source])
 			end
-		else
-			if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
-				callback(source, args, Users[source])
-			else
-				TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
-			end
-		end
-	end, true)
+		end, true)
+	end
 
 	debugMsg("Group command added: " .. command .. ", requires group: " .. group)
 end

@@ -22,7 +22,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	self.roles = stringsplit(roles, "|")
 
 	-- FXServer <3
-	ExecuteCommand('add_principal identifier.' .. self.license .. " group." .. self.group)
+	ExecuteCommand('add_principal identifier.' .. self.identifier .. " group." .. self.group)
 
 	local rTable = {}
 
