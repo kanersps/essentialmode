@@ -178,6 +178,7 @@ AddEventHandler('chatMessage', function(source, n, message)
 			CancelEvent()
 			if(command.perm > 0)then
 				if(IsPlayerAceAllowed(Source, "command." .. command_args[1]) or Users[source].getPermissions() >= command.perm or groups[Users[source].getGroup()]:canTarget(command.group))then
+					table.remove(command_args, 1)
 					if (not (command.arguments == #command_args - 1) and command.arguments > -1) then
 						TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
 					else
@@ -197,6 +198,7 @@ AddEventHandler('chatMessage', function(source, n, message)
 					debugMsg("Non admin (" .. GetPlayerName(Source) .. ") attempted to run admin command: " .. command_args[1])
 				end
 			else
+				table.remove(command_args, 1)
 				if (not (command.arguments <= (#command_args - 1)) and command.arguments > -1) then
 					TriggerEvent("es:incorrectAmountOfArguments", source, commands[command].arguments, #args, Users[source])
 				else
