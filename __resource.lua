@@ -8,7 +8,7 @@ resource_manifest_version '44febabe-d386-4d18-afbe-5e627f4af937'
 description 'EssentialMode by Kanersps.'
 
 server_scripts {
-	'server/sqlite/sv_database.js',
+	'server/sqlite/SQLite.net.dll',
 	'config.lua',
 	'server/util.lua',
 	'server/main.lua',
