@@ -3,7 +3,7 @@
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 -- NO TOUCHY, IF SOMETHING IS WRONG CONTACT KANERSPS! --
 
-_VERSION = '6.0.2'
+_VERSION = '6.1.0'
 _FirstCheckPerformed = false
 _UUID = LoadResourceFile(GetCurrentResourceName(), "uuid") or "unknown"
 
