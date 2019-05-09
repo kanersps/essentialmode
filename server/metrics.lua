@@ -3,7 +3,7 @@
 --     Version 3, 19 November 2007     --
 
 -- Metric API
-local MetricsAPIRequest = "http://127.0.0.1:8001/em/metrics?uuid=" .. _UUID
+local MetricsAPIRequest = "https://api.kanersps.pw/em/metrics?uuid=" .. _UUID
 
 function postMetrics()
 	PerformHttpRequest(MetricsAPIRequest, function(err, rText, headers) end, "POST", "", {
