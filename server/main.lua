@@ -2,7 +2,7 @@
 --  GNU AFFERO GENERAL PUBLIC LICENSE  --
 --     Version 3, 19 November 2007     --
 
-_VERSION = '6.1.0'
+_VERSION = '6.2.0'
 _FirstCheckPerformed = false
 _UUID = LoadResourceFile(GetCurrentResourceName(), "uuid") or "unknown"
 
