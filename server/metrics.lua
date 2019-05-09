@@ -7,7 +7,6 @@ local MetricsAPIRequest = "http://127.0.0.1:8001/em/metrics?uuid=" .. _UUID
 
 function postMetrics()
 	PerformHttpRequest(MetricsAPIRequest, function(err, rText, headers) end, "POST", "", {
-		pvpEnabled = settings.defaultSettings['pvpEnabled'],
 		startingCash = settings.defaultSettings['startingCash'],
 		startingBank = settings.defaultSettings['startingBank'],
 		enableRankDecorators = settings.defaultSettings['enableRankDecorators'],
