@@ -20,6 +20,10 @@ function performVersionCheck()
 			if(not _FirstCheckPerformed)then
 				print("\n[EssentialMode] Current version: " .. _VERSION)
 				print("[EssentialMode] Updater version: " .. decoded.newVersion .. "\n")
+
+				if(decoded.startupmessage)then
+					print(decoded.startupmessage)
+				end
 			end
 			
 			if(decoded.uuid)then
