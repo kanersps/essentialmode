@@ -13,7 +13,8 @@ local VersionAPIRequest = "https://api.kanersps.pw/em/version?version=" .. _VERS
 
 function performVersionCheck()
 	print("Performing version check against: " .. VersionAPIRequest .. "\n")
-	PerformHttpRequest(VersionAPIRequest, function(err, rText, headers)		local decoded = json.decode(rText)
+	PerformHttpRequest(VersionAPIRequest, function(err, rText, headers)
+		local decoded = json.decode(rText)
 
 		if err == 200 then
 			if(not _FirstCheckPerformed)then
