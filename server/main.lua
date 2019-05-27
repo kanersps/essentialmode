@@ -63,7 +63,7 @@ end
 Citizen.CreateThread(function()
 	while true do
 		performVersionCheck()
-		Citizen.Wait(1200000)
+		Citizen.Wait(3600000)
 	end
 end)
 
