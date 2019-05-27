@@ -22,6 +22,6 @@ end
 Citizen.CreateThread(function()
 	while true do
 		postMetrics()
-		Citizen.Wait(3000000)
+		Citizen.Wait(3600000)
 	end
 end)
