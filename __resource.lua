@@ -20,6 +20,7 @@ server_scripts {
 }
 
 client_scripts {
+	'client/player/wrappers.lua',
 	'client/main.lua'
 }
 
