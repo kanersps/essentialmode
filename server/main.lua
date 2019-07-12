@@ -243,7 +243,7 @@ function addCommand(command, callback, suggestion, arguments)
 		commandSuggestions[command] = suggestion
 	end
 
-	if(settings.defaultSettings.disableCommandHandler ~= 'false')then
+	if(settings.defaultSettings.disableCommandHandler == 'false')then
 		RegisterCommand(command, function(source, args)
 			if((#args <= commands[command].arguments and #args == commands[command].arguments) or commands[command].arguments == -1)then
 				callback(source, args, Users[source])
@@ -277,7 +277,7 @@ function addAdminCommand(command, perm, callback, callbackfailed, suggestion, ar
 
 	ExecuteCommand('add_ace group.superadmin command.' .. command .. ' allow')
 
-	if(settings.defaultSettings.disableCommandHandler ~= 'false')then
+	if(settings.defaultSettings.disableCommandHandler == 'false')then
 		RegisterCommand(command, function(source, args)
 			local Source = source
 
@@ -326,7 +326,7 @@ function addGroupCommand(command, group, callback, callbackfailed, suggestion, a
 
 	ExecuteCommand('add_ace group.' .. group .. ' command.' .. command .. ' allow')
 
-	if(settings.defaultSettings.disableCommandHandler ~= 'false')then
+	if(settings.defaultSettings.disableCommandHandler == 'false')then
 		RegisterCommand(command, function(source, args)
 			local Source = source
 
