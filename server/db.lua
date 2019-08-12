@@ -32,27 +32,27 @@ function db.firstRunCheck()
 
 		PerformHttpRequest("http://" .. ip .. ":" .. port .. "/essentialmode", function(err, rText, headers)
 			if err == 0 then
-				print("-------------------------------------------------------------")
-				print("--- No errors detected, essentialmode is setup properly. ---")
-				print("-------------------------------------------------------------")
+				print(_Prefix .. "-------------------------------------------------------------")
+				print(_Prefix .. "--- No errors detected, essentialmode is setup properly. ---")
+				print(_Prefix .. "-------------------------------------------------------------")
 			elseif err == 412 then
-				print("-------------------------------------------------------------")
-				print("--- No errors detected, essentialmode is setup properly. ---")
-				print("-------------------------------------------------------------")
+				print(_Prefix .. "-------------------------------------------------------------")
+				print(_Prefix .. "--- No errors detected, essentialmode is setup properly. ---")
+				print(_Prefix .. "-------------------------------------------------------------")
 			elseif err == 401 then
-				print("------------------------------------------------------------------------------------------------")
-				print("--- Error detected in authentication, please take a look at your convars for essentialmode. ---")
-				print("------------------------------------------------------------------------------------------------")
+				print(_PrefixError .. "------------------------------------------------------------------------------------------------")
+				print(_PrefixError .. "--- Error detected in authentication, please take a look at your convars for essentialmode. ---")
+				print(_PrefixError .. "------------------------------------------------------------------------------------------------")
 				log('== Authentication error with CouchDB ==')
 			elseif err == 201 then
-				print("-------------------------------------------------------------")
-				print("--- No errors detected, essentialmode is setup properly. ---")
-				print("-------------------------------------------------------------")
+				print(_Prefix .. "-------------------------------------------------------------")
+				print(_Prefix .. "--- No errors detected, essentialmode is setup properly. ---")
+				print(_Prefix .. "-------------------------------------------------------------")
 				log('== DB Created ==')			
 			else
-				print("------------------------------------------------------------------------------------------------")
-				print("--- Unknown error detected ( " .. err .. " ): " .. rText)
-				print("------------------------------------------------------------------------------------------------")
+				print(_PrefixError .. "------------------------------------------------------------------------------------------------")
+				print(_PrefixError .. "--- Unknown error detected ( " .. err .. " ): " .. rText)
+				print(_PrefixError .. "------------------------------------------------------------------------------------------------")
 				log('== Unknown error, (' .. err .. '): ' .. rText .. ' ==')
 			end
 		end, "PUT", "", {Authorization = "Basic " .. auth})
@@ -93,7 +93,7 @@ local function getUUID(amount, cb)
 	requestDB('GET', '_uuids?count=' .. amount, nil, nil, function(err, rText, headers)
 		if err ~= 200 then
 			log('== Could not retrieve UUID from CouchDB, error('.. err .. '): '.. rText .. ' ==')
-			print('Error occurred while performing database request: could not retrieve UUID, error code: ' .. err .. ", server returned: " .. rText)
+			print(_PrefixError .. ' Error occurred while performing database request: could not retrieve UUID, error code: ' .. err .. ", server returned: " .. rText)
 		else
 			if cb then
 				if amount > 1 then
@@ -112,7 +112,7 @@ local function getDocument(uuid, callback)
 
 		if err ~= 200 then
 			log('== Could not retrieve document from CouchDB, error('.. err .. '): '.. rText .. ' ==')
-			print('Error occurred while performing database request: could not retrieve document, error code: ' .. err .. ", server returned: " .. rText)
+			print(_PrefixError .. 'Error occurred while performing database request: could not retrieve document, error code: ' .. err .. ", server returned: " .. rText)
 		else
 			if callback then
 				if doc then callback(doc) else callback(false) end
@@ -127,7 +127,7 @@ local function createDocument(doc, cb)
 	getUUID(1, function(uuid)
 		requestDB('PUT', 'essentialmode/' .. uuid, doc, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
 			if err ~= 201 then
-				print('Error occurred while performing database request: could not create document, error code: ' .. err .. ", server returned: " .. rText)
+				print(_PrefixError .. 'Error occurred while performing database request: could not create document, error code: ' .. err .. ", server returned: " .. rText)
 			else
 				if cb then
 					cb(rText, doc)
@@ -156,7 +156,7 @@ local function updateDocument(docID, updates, callback)
 			requestDB('PUT', 'essentialmode/' .. docID, doc, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
 				if not json.decode(rText).ok then
 					if err ~= 409 then
-						print('Error occurred while performing database request: could not update document error ' .. err .. ", returned: " .. rText)
+						print(_PrefixError .. 'Error occurred while performing database request: could not update document error ' .. err .. ", returned: " .. rText)
 					end
 				else
 					if callback then
@@ -165,7 +165,7 @@ local function updateDocument(docID, updates, callback)
 				end
 			end)
 		else
-			print("Error occurred while performing database request: could not find document (" .. docID .. ")")
+			print(_PrefixError .. "Error occurred while performing database request: could not find document (" .. docID .. ")")
 		end
 	end)
 end
@@ -195,7 +195,7 @@ function db.createUser(identifier, license, callback)
 				end
 			end)
 		else
-			print("Error occurred while creating user, missing parameter or incorrect parameter: identifier")
+			print(_PrefixError .. "Error occurred while creating user, missing parameter or incorrect parameter: identifier")
 		end
 	elseif settings.defaultSettings.defaultDatabase == '1' and settings.defaultSettings.enableCustomData ~= '1' then
 		TriggerEvent("es_sqlite:createUser", identifier, license, tonumber(settings.defaultSettings.startingCash), tonumber(settings.defaultSettings.startingBank), "user", 0, "", callback)
@@ -213,11 +213,11 @@ function db.doesUserExist(identifier, callback)
 						if json.decode(rText).docs[1] then callback(true) else callback(false) end
 					end
 				else
-					print('Error occurred while attempting to find user in CouchDB.')
+					print(_PrefixError .. 'Error occurred while attempting to find user in CouchDB.')
 				end
 			end)
 		else
-			print("Error occurred while checking existance user, missing parameter or incorrect parameter: identifier")
+			print(_PrefixError .. "Error occurred while checking existance user, missing parameter or incorrect parameter: identifier")
 		end
 	elseif settings.defaultSettings.defaultDatabase == '1' and settings.defaultSettings.enableCustomData ~= '1' then
 		TriggerEvent("es_sqlite:doesUserExist", identifier, callback)
@@ -236,7 +236,7 @@ function db.retrieveUser(identifier, callback)
 				end
 			end)
 		else
-			print("Error occurred while retrieving user, missing parameter or incorrect parameter: identifier")
+			print(_PrefixError .. "Error occurred while retrieving user, missing parameter or incorrect parameter: identifier")
 		end
 	elseif settings.defaultSettings.defaultDatabase == '1' and settings.defaultSettings.enableCustomData ~= '1' then
 		TriggerEvent("es_sqlite:retrieveUser", identifier, callback)
