@@ -11,10 +11,10 @@ EssentialMode is a FiveM resource which is used to bring a central management in
 - Attempt at OOP for easy usage
 
 ## Installation
-Please follow this guide: https://docs.essentialmode.com/#installation
+Please follow this guide: https://wiki.kanersps.pw/display/FIV/Installation
 
 ## Documentation
-Documentation for EssentialMode can be found at: https://docs.essentialmode.com/
+Documentation for EssentialMode can be found at: https://wiki.kanersps.pw/display/FIV/Documentation
 
 # Rent a server with EssentialMode pre-installed!
 Go to https://zap-hosting.com/EssentialMode and use code `kanersps-a-2529` for 10% off on all products for life! They will even install EssentialMode for you!
