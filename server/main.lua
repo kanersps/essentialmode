@@ -120,10 +120,7 @@ AddEventHandler('es:firstJoinProper', function()
 		else
 			registerUser(id, Source)
 			justJoined[Source] = true
-
-			if(settings.defaultSettings.pvpEnabled)then
-				TriggerClientEvent("es:enablePvp", Source)
-			end
+	
 		end
 
 		return
@@ -147,10 +144,6 @@ AddEventHandler('playerSpawn', function()
 		Citizen.CreateThread(function()
 			while Users[Source] == nil do Wait(0) end
 			TriggerEvent("es:firstSpawn", Source, Users[Source])
-
-			if settings.defaultSettings.pvpEnabled ~= "false" then
-				TriggerClientEvent("es:enablePvp", Source)
-			end
 
 			return
 		end)
