@@ -91,7 +91,7 @@ RegisterServerEvent('playerConnecting')
 AddEventHandler('playerConnecting', function(name, setKickReason)
 	local id
 	for k,v in ipairs(GetPlayerIdentifiers(source))do
-		if string.sub(v, 1, string.len("steam:")) == "steam:" then
+		if string.sub(v, 1, string.len(settings.defaultSettings.identifierUsed .. ":")) == (settings.defaultSettings.identifierUsed .. ":") then
 			id = v
 			break
 		end
@@ -109,7 +109,7 @@ AddEventHandler('es:firstJoinProper', function()
 	Citizen.CreateThread(function()
 		local id
 		for k,v in ipairs(GetPlayerIdentifiers(Source))do
-			if string.sub(v, 1, string.len("steam:")) == "steam:" then
+			if string.sub(v, 1, string.len(settings.defaultSettings.identifierUsed .. ":")) == (settings.defaultSettings.identifierUsed .. ":") then
 				id = v
 				break
 			end
