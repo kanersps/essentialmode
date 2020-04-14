@@ -14,6 +14,8 @@ Citizen.CreateThread(function()
 	end
 end)
 
+TriggerServerEvent('es:firstJoinProper')
+
 local oldPos
 
 Citizen.CreateThread(function()
