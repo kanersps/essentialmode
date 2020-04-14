@@ -51,7 +51,13 @@ function performVersionCheck()
 			end
 
 			if decoded.extra then
-				print(decoded.extra)
+				if(show_zap ~= "1")then
+					print(decoded.extra)
+				else
+					if(decoded.extra ~= "^1Advertisement: ^7Want to have EssentialMode pre-installed on a good and affordable server host? Go to the following link: https://zap-hosting.com/EssentialMode")then
+						print(decoded.extra)
+					end
+				end
 			end
 		else
 			print(_Prefix .. " Updater version: UPDATER UNAVAILABLE")
