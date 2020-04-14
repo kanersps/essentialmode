@@ -5,8 +5,8 @@
 _VERSION = '6.3.0'
 _FirstCheckPerformed = false
 _UUID = LoadResourceFile(GetCurrentResourceName(), "uuid") or "unknown"
-_Prefix = '^2[EssentialMode]^0'
-_PrefixError = '^1[EssentialMode]^0'
+_Prefix = GetConvar("es_prefix", '^2[EssentialMode]^0')
+_PrefixError = GetConvar("es_errorprefix", '^1[EssentialMode]^0')
 
 -- Server
 
