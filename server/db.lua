@@ -154,13 +154,17 @@ local function updateDocument(docID, updates, callback)
 			end
 
 			requestDB('PUT', 'essentialmode/' .. docID, doc, {["Content-Type"] = 'application/json'}, function(err, rText, headers)
-				if not json.decode(rText).ok then
-					if err ~= 409 then
-						print(_PrefixError .. 'Error occurred while performing database request: could not update document error ' .. err .. ", returned: " .. rText)
-					end
+				if rText == nil then
+					print(_PrefixError .. 'Error occurred while performing database request: could not update document error ' .. err )
 				else
-					if callback then
-						callback(rText)
+					if not json.decode(rText).ok then
+						if err ~= 409 then
+							print(_PrefixError .. 'Error occurred while performing database request: could not update document error ' .. err .. ", returned: " .. rText)
+						end
+					else
+						if callback then
+							callback(rText)
+						end
 					end
 				end
 			end)
