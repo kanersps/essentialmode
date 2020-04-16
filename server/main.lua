@@ -365,8 +365,12 @@ end)
 
 RegisterServerEvent('es:updatePositions')
 AddEventHandler('es:updatePositions', function(x, y, z)
-	if(Users[source])then
-		Users[source].setCoords(x, y, z)
+	if(settings.defaultSettings.sendPosition == "0")then
+		TriggerClientEvent("es:disableClientPosition", source)
+	else
+		if(Users[source])then
+			Users[source].setCoords(x, y, z)
+		end
 	end
 end)
 
