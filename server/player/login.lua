@@ -12,7 +12,7 @@ function LoadUser(identifier, source, new, licenseNotRequired)
 
 		if user.license or licenseNotRequired or overwriteLicense then
 			-- Creates the player class for OOP imitation and then sets a var to say which idType was used (This isn't relevant anymore)
-			Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.license, user.group, user.roles or "")
+			Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.license or "", user.group, user.roles or "")
 			Users[Source].setSessionVar('idType', 'identifier')
 			
 			-- Tells other resources that a player has loaded

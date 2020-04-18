@@ -96,14 +96,16 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	end
 
 	-- Adds money to the user
-	rTable.addMoney = function(m)
+	rTable.addMoney = function(m, recursion)
 		if type(m) == "number" then
 			local newMoney = self.money + m
 
 			self.money = newMoney
 
 			-- Support for live data intergration with third party frameworks
-			TriggerEvent("es:addMoney", self.source, m)
+			if(not recursion) then
+				TriggerEvent("es:addMoney", self.source, m)
+			end
 
 			-- This is used for every UI component to tell them money was just added
 			TriggerClientEvent("es:addedMoney", self.source, m, (settings.defaultSettings.nativeMoneySystem == "1"), self.money)
@@ -126,7 +128,9 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 			self.money = newMoney
 
 			-- Support for live data intergration with third party frameworks
-			TriggerEvent("es:removeMoney", self.source, m)
+			if(not recursion) then
+				TriggerEvent("es:removeMoney", self.source, m)
+			end
 
 			-- This is used for every UI component to tell them money was just removed
 			TriggerClientEvent("es:removedMoney", self.source, m, (settings.defaultSettings.nativeMoneySystem == "1"), self.money)
