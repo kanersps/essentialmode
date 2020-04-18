@@ -41,7 +41,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 			end
 			
 			-- Support for live data intergration with third party frameworks
-			TriggerEvent("es:setMoney", self, m)
+			TriggerEvent("es:setMoney", self.source, m)
 
 			-- Checks what money UI component is enabled
 			if settings.defaultSettings.nativeMoneySystem == "0" then
@@ -62,7 +62,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	rTable.setBankBalance = function(m)
 		if type(m) == "number" then
 			-- Support for live data intergration with third party frameworks
-			TriggerEvent("es:setBank", self, m)
+			TriggerEvent("es:setBank", self.source, m)
 
 			-- Triggers an event to save it to the database
 			TriggerEvent("es:setPlayerData", self.source, "bank", m, function(response, success)
@@ -103,7 +103,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 			self.money = newMoney
 
 			-- Support for live data intergration with third party frameworks
-			TriggerEvent("es:addMoney", self, m)
+			TriggerEvent("es:addMoney", self.source, m)
 
 			-- This is used for every UI component to tell them money was just added
 			TriggerClientEvent("es:addedMoney", self.source, m, (settings.defaultSettings.nativeMoneySystem == "1"), self.money)
@@ -126,7 +126,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 			self.money = newMoney
 
 			-- Support for live data intergration with third party frameworks
-			TriggerEvent("es:removeMoney", self, m)
+			TriggerEvent("es:removeMoney", self.source, m)
 
 			-- This is used for every UI component to tell them money was just removed
 			TriggerClientEvent("es:removedMoney", self.source, m, (settings.defaultSettings.nativeMoneySystem == "1"), self.money)
@@ -148,7 +148,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 			self.bank = newBank
 
 			-- Support for live data intergration with third party frameworks
-			TriggerEvent("es:addBank", self, m)
+			TriggerEvent("es:addBank", self.source, m)
 
 			-- Triggers an event to tell the UI components money was just added
 			TriggerClientEvent("es:addedBank", self.source, m)
@@ -165,7 +165,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 			self.bank = newBank
 
 			-- Support for live data intergration with third party frameworks
-			TriggerEvent("es:removeBank", self, m)
+			TriggerEvent("es:removeBank", self.source, m)
 
 			-- Triggers an event to tell the UI components money was just removed
 			TriggerClientEvent("es:removedBank", self.source, m)
@@ -211,7 +211,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	-- Session variables, handy for temporary variables attached to a player
 	rTable.setSessionVar = function(key, value)
 		-- Support for live data intergration with third party frameworks
-		TriggerEvent("es:setSessionVar", self, k, v)
+		TriggerEvent("es:setSessionVar", self.source, k, v)
 
 		self.session[key] = value
 	end
@@ -230,7 +230,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	rTable.setPermissions = function(p)
 		if type(p) == "number" then
 		-- Support for live data intergration with third party frameworks
-		TriggerEvent("es:setPermissionLevel", self, p)
+		TriggerEvent("es:setPermissionLevel", self.source, p)
 
 			self.permission_level = p
 		else
@@ -252,7 +252,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	-- Global set
 	rTable.set = function(k, v)
 		-- Support for live data intergration with third party frameworks
-		TriggerEvent("es:set", self, k, v)
+		TriggerEvent("es:set", self.source, k, v)
 
 		self[k] = v
 	end
@@ -265,7 +265,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	-- Creates globals, pretty nifty function take a look at https://docs.essentialmode.com for more info
 	rTable.setGlobal = function(g, default)
 		-- Support for live data intergration with third party frameworks
-		TriggerEvent("es:setGlobal", self, g, default)
+		TriggerEvent("es:setGlobal", self.source, g, default)
 
 		self[g] = default or ""
 
@@ -293,7 +293,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	-- Adds a role to a user, and if they already have it it will say they had it
 	rTable.giveRole = function(role)
 		-- Support for live data intergration with third party frameworks
-		TriggerEvent("es:giveRole", self, role)
+		TriggerEvent("es:giveRole", self.source, role)
 
 		for k,v in pairs(self.roles)do
 			if v == role then
@@ -309,6 +309,9 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 
 	-- Removes a role from a user
 	rTable.removeRole = function(role)
+		-- Support for live data intergration with third party frameworks
+		TriggerEvent("es:removeRole", self.source, role)
+
 		for k,v in pairs(self.roles)do
 			if v == role then
 				table.remove(self.roles, k)

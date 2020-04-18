@@ -5,12 +5,12 @@
 -- Loads the user when called, only ever needs to get called once
 function LoadUser(identifier, source, new, licenseNotRequired)
 	local Source = source
-	db.retrieveUser(identifier, function(user, isJson)
+	db.retrieveUser(identifier, function(user, isJson, overwriteLicense)
 		if isJson then
 			user = json.decode(user)
 		end
 
-		if user.license or licenseNotRequired then
+		if user.license or licenseNotRequired or overwriteLicense then
 			-- Creates the player class for OOP imitation and then sets a var to say which idType was used (This isn't relevant anymore)
 			Users[source] = CreatePlayer(source, user.permission_level, user.money, user.bank, user.identifier, user.license, user.group, user.roles or "")
 			Users[Source].setSessionVar('idType', 'identifier')
