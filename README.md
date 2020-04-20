@@ -1,5 +1,8 @@
 # EssentialMode
 
+## Support development
+Hey, thank you very much for trying out my software. If you'd like to support continued development I'd very much appreciate if you'd pledge any amount to: https://www.patreon.com/gdevelopment
+
 ## Description
 EssentialMode is a FiveM resource which is used to bring a central management interface for other resources. It handles player data saving like their money, groups and roles and makes these easily usable by other resources.
 
