@@ -256,7 +256,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	-- Global set
 	rTable.set = function(k, v)
 		-- Support for live data intergration with third party frameworks
-		TriggerEvent("es:set", self.source, k, v)
+		TriggerEvent("es:set", self.source, k, v, true)
 
 		self[k] = v
 	end
