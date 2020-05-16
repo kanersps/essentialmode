@@ -121,7 +121,7 @@ function CreatePlayer(source, permission_level, money, bank, identifier, license
 	end
 
 	-- Removes money from the user
-	rTable.removeMoney = function(m)
+	rTable.removeMoney = function(m, recursion)
 		if type(m) == "number" then
 			local newMoney = self.money - m
 
