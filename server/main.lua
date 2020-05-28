@@ -16,9 +16,8 @@ local VersionAPIRequest = "https://api.kanersps.pw/em/version?version=" .. _VERS
 function performVersionCheck()
 	print("Performing version check against: " .. VersionAPIRequest .. "\n")
 	PerformHttpRequest(VersionAPIRequest, function(err, rText, headers)
-		local decoded = json.decode(rText)
-
-		if err == 200 then
+		if err == 200 and rText ~= nil then
+			local decoded = json.decode(rText)
 			if(not _FirstCheckPerformed)then
 				print("\n" .. _Prefix .. " Current version: " .. _VERSION)
 				print(_Prefix .. " Updater version: " .. decoded.newVersion .. "\n")
