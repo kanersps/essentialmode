@@ -3,7 +3,7 @@
 --     Version 3, 19 November 2007     --
 
 local enablePositionSending = true
-local UpdateTickTime        = 5000
+local UpdateTickTime = 5000
 CreateThread(function()
 	while true do
 		Wait(0)
@@ -23,10 +23,13 @@ local oldPos
 CreateThread(function()
 	while enablePositionSending do
 		Wait(UpdateTickTime)
-		local pos = GetEntityCoords(PlayerPedId())
-		if(oldPos ~= pos)then
+		local playerPed = PlayerPedId()
+		local playerCoords = GetEntityCoords(playerPed)
+		local distance = #(playerCoords - previousCoords)
+		if distance > 10 then
 			TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
-			oldPos = pos
+			previousCoords = playerCoords
+		        end
 		end
 	end
 end)
