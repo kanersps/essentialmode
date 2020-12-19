@@ -3,10 +3,10 @@
 --     Version 3, 19 November 2007     --
 
 local enablePositionSending = true
-
-Citizen.CreateThread(function()
+local UpdateTickTime        = 5000
+CreateThread(function()
 	while true do
-		Citizen.Wait(0)
+		Wait(0)
 
 		if NetworkIsSessionStarted() then
 			TriggerServerEvent('es:firstJoinProper')
@@ -20,11 +20,10 @@ TriggerServerEvent('es:firstJoinProper')
 
 local oldPos
 
-Citizen.CreateThread(function()
+CreateThread(function()
 	while enablePositionSending do
-		Citizen.Wait(1000)
+		Wait(UpdateTickTime)
 		local pos = GetEntityCoords(PlayerPedId())
-
 		if(oldPos ~= pos)then
 			TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
 			oldPos = pos
