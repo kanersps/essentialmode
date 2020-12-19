@@ -24,9 +24,8 @@ CreateThread(function()
 		local pos = GetEntityCoords(playerPed)
 		local distance = #(pos - previousCoords)
 		    if distance > 10 then
-			    TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
-			    previousCoords = pos
-                       end
+			TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
+			previousCoords = pos
 		end
 	end
 end)
