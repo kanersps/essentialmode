@@ -18,12 +18,13 @@ CreateThread(function()
 end)
 
 CreateThread(function()
+    local previousCoords = vector3(0, 0, 0)
 	while enablePositionSending do
 		Wait(UpdateTickTime)
 		local playerPed = PlayerPedId()
 		local pos = GetEntityCoords(playerPed)
 		local distance = #(pos - previousCoords)
-		    if distance > 10 then
+		if distance > 10 then
 			TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
 			previousCoords = pos
 		end
