@@ -16,19 +16,21 @@ CreateThread(function()
 		end
 	end
 end)
-
+if enablePositionSending then
 CreateThread(function()
-	while enablePositionSending do
+        local previousCoords = vector3(0, 0, 0)
+	while true do
 		Wait(UpdateTickTime)
 		local playerPed = PlayerPedId()
 		local pos = GetEntityCoords(playerPed)
 		local distance = #(pos - previousCoords)
-		    if distance > 10 then
-			TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
-			previousCoords = pos
-		end
-	end
-end)
+		if distance > 10 then
+		  TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
+		  previousCoords = pos
+	      end
+	 end
+    end)
+end
 
 local myDecorators = {}
 RegisterNetEvent("es:setPlayerDecorator")
