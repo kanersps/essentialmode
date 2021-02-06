@@ -5,10 +5,8 @@
 local enablePositionSending = true
 local UpdateTickTime = 5000
 CreateThread(function()
-        TriggerServerEvent('es:firstJoinProper')
 	while true do
 		Wait(0)
-
 		if NetworkIsSessionStarted() then
 			TriggerServerEvent('es:firstJoinProper')
 			TriggerEvent('es:allowedToSpawn')
@@ -17,16 +15,15 @@ CreateThread(function()
 	end
 end)
 
+local oldPos = vector3(0, 0, 0)
 CreateThread(function()
-    local previousCoords = vector3(0, 0, 0)
 	while enablePositionSending do
 		Wait(UpdateTickTime)
 		local playerPed = PlayerPedId()
 		local pos = GetEntityCoords(playerPed)
-		local distance = #(pos - previousCoords)
-		if distance > 10 then
+		if #(oldPos - pos) > 10 then
 			TriggerServerEvent('es:updatePositions', pos.x, pos.y, pos.z)
-			previousCoords = pos
+			oldPos = pos
 		end
 	end
 end)
