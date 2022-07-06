@@ -3,72 +3,37 @@
 --     Version 3, 19 November 2007     --
 
 _VERSION = '6.4.2'
-_FirstCheckPerformed = false
-_UUID = LoadResourceFile(GetCurrentResourceName(), "uuid") or "unknown"
 _Prefix = GetConvar("es_prefix", '^2[EssentialMode]^0')
 _PrefixError = GetConvar("es_errorprefix", '^1[EssentialMode]^0')
 
 -- Server
 
 -- Version check
-local VersionAPIRequest = "https://api.kanersps.pw/em/version?version=" .. _VERSION .. "&uuid=" .. _UUID
+local VersionAPIRequest = "https://api.github.com/repos/kanersps/essentialmode/releases/latest"
 
 function performVersionCheck()
 	print("Performing version check against: " .. VersionAPIRequest .. "\n")
 	PerformHttpRequest(VersionAPIRequest, function(err, rText, headers)
 		if err == 200 and rText ~= nil then
 			local decoded = json.decode(rText)
-			if(not _FirstCheckPerformed)then
+			local newVersion = decoded.tag_name
+			local changes = decoded.body
+
+			if newVersion ~= _VERSION then
 				print("\n" .. _Prefix .. " Current version: " .. _VERSION)
-				print(_Prefix .. " Updater version: " .. decoded.newVersion .. "\n")
+				print(_Prefix .. " Updater version: " .. newVersion .. "\n")
 
-				if(decoded.startupmessage)then
-					print(decoded.startupmessage)
-				end
-			end
-			
-			if(decoded.uuid)then
-				SaveResourceFile(GetCurrentResourceName(), "uuid", decoded.uuid, -1)
-
-				_UUID = decoded.uuid
-				if(not _FirstCheckPerformed)then
-					ExecuteCommand("sets EssentialModeUUID " .. _UUID)
-					ExecuteCommand("sets EssentialModeVersion " .. _VERSION)
-					_FirstCheckPerformed = true
-				end
-			end
-
-			if not decoded.updated then
-				print("\n" .. _Prefix .. " Current version: " .. _VERSION)
-				print(_Prefix .. " Updater version: " .. decoded.newVersion .. "\n")
-
-				print(_Prefix .. " Changelog: \n" .. decoded.changes .. "\n")
-				print(_Prefix .. " You're not running the newest stable version of EssentialMode please update:\n" .. decoded.updateLocation)
+				print(_Prefix .. " Changelog: \n" .. changes .. "\n")
+				print(_Prefix .. " You're not running the newest stable version of EssentialMode please update:\n" .. decoded.html_url)
 				log('Version mismatch was detected, updater version: ' .. rText .. '(' .. _VERSION .. ')')
 			else
 				print(_Prefix .. " Everything is nice and updated!\n")
 			end
-
-			if decoded.extra then
-				if(show_zap ~= "1")then
-					print(decoded.extra)
-				else
-					if(decoded.extra ~= "^1Advertisement: ^7Want to have EssentialMode pre-installed on a good and affordable server host? Go to the following link: https://zap-hosting.com/EssentialMode")then
-						print(decoded.extra)
-					end
-				end
-			end
 		else
 			print(_Prefix .. " Updater version: UPDATER UNAVAILABLE")
 			print(_Prefix .. " This could be your internet connection or that the update server is not running. This won't impact the server\n\n")
-		
-			if(not _FirstCheckPerformed)then
-				ExecuteCommand("sets EssentialModeUUID " .. _UUID)
-				ExecuteCommand("sets EssentialModeVersion " .. _VERSION)
-				_FirstCheckPerformed = true
-			end
 		end
-	end, "GET", "", {what = 'this'})
+	end, "GET", "", {})
 end
 
 -- Perform version check periodically while server is running. To notify of updates.
